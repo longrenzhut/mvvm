@@ -1,0 +1,48 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+
+android {
+    compileSdkVersion rootProject.ext.android.compileSdkVersion
+    buildToolsVersion rootProject.ext.android.buildToolsVersion
+
+    defaultConfig {
+        minSdkVersion rootProject.ext.android.minSdkVersion
+        targetSdkVersion rootProject.ext.android.targetSdkVersion
+        versionCode 1
+        versionName "1.0"
+
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+apply plugin: 'org.greenrobot.greendao'
+
+greendao {
+    schemaVersion 1  //版本
+    daoPackage 'com.zhongcai.common.helper.db' // 一般为app包名+生成文件的文件夹名
+    targetGenDir 'src/main/java' //生成文件路径
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+
+    compile project(':thirdlibs:wechatsdk')
+    compile project(':thirdlibs:imagepicker')
+    compile project(':thirdlibs:app_base')
+    compile project(':thirdlibs:vlayout')
+    implementation rootProject.ext.dependencies["kotlin-stdlib"]
+    implementation rootProject.ext.dependencies["permission"]
+    implementation rootProject.ext.dependencies["photoview"]
+    compile rootProject.ext.dependencies["greendao"]
+
+
+}
+repositories {
+    mavenCentral()
+}

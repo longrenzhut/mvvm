@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <item type="id" name="statusbar" />
+    <item type="id" name="header" />
+    <item type="id" name="uiloadlayout" />
+
+    <item type="id" name="id_smarttaglayout_content" />
+    <item type="id" name="id_smarttaglayout_tag" />
+</resources>

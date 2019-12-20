@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+
+    <!-- Base application theme. -->
+    <style name="BaseAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorTheme</item>
+        <item name="colorPrimaryDark">@color/colorTheme</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <!-- <item name="android:windowFullscreen">true</item>-->
+    </style>
+
+    <style name="AppTheme.Base" parent="Theme.AppCompat.Light.DarkActionBar">
+
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:statusBarColor" tools:targetApi="21">@color/colorPrimaryDark</item>
+
+        // 去掉系统状态栏下的windowContentOverlay
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:configChanges">orientation|keyboardHidden</item>
+
+        <item name="android:windowLightStatusBar" tools:targetApi="23">true</item>
+        <item name="android:windowIsTranslucent">false</item>
+        <item name="android:windowBackground">@color/colorBgTheme</item>
+        <!--<item name="android:listDivider">@drawable/shape_divider</item>-->
+        <item name="android:windowSoftInputMode">adjustPan|stateAlwaysHidden</item>
+        <item name="android:screenOrientation">portrait</item>
+        <item name="android:windowAnimationStyle">@style/BaseSlideAnimation</item>
+
+        <!--<item name="android:indeterminateTint" tools:targetApi="21">@color/cl_ff5151</item>
+        <item name="android:indeterminateTintMode" tools:targetApi="21">src_atop</item>-->
+
+        <!--5.0以上系统满屏-->
+        <item name="android:windowTranslucentStatus" tools:targetApi="21">true</item>
+
+    </style>
+
+
+
+    <style name="AppTheme" parent="AppTheme.Base"></style>
+
+
+    <style name="transparentTheme" parent="AppTheme.Base">
+
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@color/transparent</item>
+
+    </style>
+
+
+
+    <style name="AnimationToast">
+        <item name="android:windowEnterAnimation">@anim/toast_fade_enter</item>
+        <item name="android:windowExitAnimation">@anim/toast_fade_exit</item>
+    </style>
+
+</resources>

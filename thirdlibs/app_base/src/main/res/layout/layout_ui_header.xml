@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    >
+
+    <com.zhongcai.base.theme.layout.StatusbarUIView
+        android:id="@+id/view_status"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+
+    <RelativeLayout
+        android:id="@+id/m_rly_exit"
+        android:layout_width="match_parent"
+        android:background="@color/white"
+        android:layout_height="@dimen/y44">
+
+
+
+
+        <ImageView
+            android:id="@+id/m_iv_exit"
+            android:layout_marginLeft="@dimen/x4"
+            android:layout_width="@dimen/x44"
+            android:layout_height="@dimen/x44"
+            android:padding="@dimen/x8"
+            android:layout_centerVertical="true"
+            android:src="@drawable/back"
+            />
+
+        <View
+            android:id="@+id/view_line"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_alignParentBottom="true"
+            android:background="@color/colorBgTheme" />
+
+    </RelativeLayout>
+
+</merge>

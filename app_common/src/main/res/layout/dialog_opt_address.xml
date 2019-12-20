@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:gravity="bottom"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorTheme"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/y60">
+
+
+            <TextView
+                android:id="@+id/mTvCancel"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/y28"
+                android:textSize="@dimen/sp_14"
+                android:paddingLeft="@dimen/x14"
+                android:paddingRight="@dimen/x14"
+                android:gravity="center"
+                android:layout_marginRight="@dimen/x12"
+                android:layout_centerVertical="true"
+                android:textColor="#1F2736"
+                android:layout_marginLeft="@dimen/x12"
+                android:text="取消"
+                android:background="@drawable/selector_prompt_left"/>
+
+
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/sp_18"
+                android:layout_centerInParent="true"
+                android:textColor="@color/cl_111928"
+                android:text="选择地区"/>
+
+
+            <TextView
+                android:id="@+id/mTvSelector"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/y28"
+                android:textSize="@dimen/sp_14"
+                android:paddingLeft="@dimen/x14"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:paddingRight="@dimen/x14"
+                android:gravity="center"
+                android:layout_marginRight="@dimen/x12"
+                android:textColor="@color/white"
+                android:text="确定"
+                android:background="@drawable/selector_prompt_right"/>
+
+
+
+        </RelativeLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/mRvTab"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/y36"
+            android:layout_marginLeft="@dimen/x24"
+            />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_marginTop="@dimen/y10"
+            android:paddingBottom="@dimen/y10"
+            android:clipChildren="true"
+            android:id="@+id/mRvAddress"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/y360"/>
+
+    </LinearLayout>
+</LinearLayout>

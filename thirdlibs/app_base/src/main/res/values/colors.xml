@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorTheme">#ffffff</color>
+
+    <color name="colorPrimary">@color/colorTheme</color>
+    <color name="colorPrimaryDark">@color/colorTheme</color>
+    <color name="colorAccent">#929292</color>
+
+    <color name="colorTransparent">#00FFFFFF</color>
+    <color name="colorBgTheme">#F7F7F9</color>
+    <color name="transparent">#00F6F6F6</color>
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="white_5">#88ffffff</color>
+
+    <color name="cl_f9f9f9">#f9f9f9</color>
+    <color name="cl_0B23CE">#0B23CE</color>
+    <color name="cl_addr">#111928</color>
+    <color name="red">#FF0000</color>
+    <color name="cl_FF4600">#FF4600</color>
+    <color name="cl_067C5F">#067C5F</color>
+    <color name="cl_FFB72A">#FFB72A</color>
+    <color name="cl_AA00B87A">#AA067C5F</color>
+    <color name="cl_82BDAF">#82BDAF</color>
+    <color name="cl_00B87A">#00B87A</color>
+    <color name="cl_3300B87A">#3300B87A</color>
+    <color name="cl_aa000000">#aa000000</color>
+    <color name="cl_1100B87A">#1100B87A</color>
+    <color name="cl_00FFD9">#00FFD9</color>
+    <color name="cl_B3EBE1">#B3EBE1</color>
+    <color name="cl_F3F3F3">#F3F3F3</color>
+    <color name="cl_485465">#485465</color>
+    <color name="cl_FFDFBE">#FFDFBE</color>
+    <color name="cl_FFF7EE">#FFF7EE</color>
+    <color name="cl_B66E3A">#B66E3A</color>
+    <color name="cl_057D60">#057D60</color>
+    <color name="cl_76DDFB">#76DDFB</color>
+    <color name="cl_50AAE8">#50AAE8</color>
+    <color name="cl_2D82BF">#2D82BF</color>
+    <color name="cl_D6E8F4">#D6E8F4</color>
+
+
+
+</resources>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:gravity="center"
+    android:background="@color/colorTheme"
+    android:layout_height="match_parent">
+
+
+        <ImageView
+            android:id="@+id/iv_icon"
+            android:layout_width="@dimen/x120"
+            android:layout_height="@dimen/x90"
+            android:src="@drawable/nodata"
+            />
+
+       <!-- android:src="@drawable/empty"-->
+        <TextView
+            android:id="@+id/tv_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="暂无数据"
+            android:textSize="@dimen/sp_14"
+            android:textColor="#B9BEC3"
+            android:layout_marginTop="@dimen/y10"/>
+
+
+     <!--   <zcfinance.base.ui.widget.textview.XTextView
+            android:id="@+id/tv_load_again"
+            android:layout_width="@dimen/x110"
+            android:layout_height="@dimen/y36"
+            android:layout_marginTop="@dimen/y64"
+            android:textSize="@dimen/sp_15"
+            android:text="刷新试试"/>-->
+
+
+</LinearLayout>

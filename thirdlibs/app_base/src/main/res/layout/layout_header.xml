@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/y44">
+
+    <ImageView
+        android:id="@+id/iv_exit"
+        android:layout_marginLeft="@dimen/x4"
+        android:layout_width="@dimen/x44"
+        android:layout_height="@dimen/x44"
+        android:padding="@dimen/x8"
+        android:layout_centerVertical="true"
+        android:visibility="gone"
+        android:src="@drawable/back"
+        />
+
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:textSize="@dimen/sp_18"
+        android:lines="1"
+        android:ellipsize="end"
+        android:maxWidth="@dimen/x250"
+        android:textStyle="bold"
+        android:textColor="#111928"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_alignParentRight="true"
+        android:orientation="horizontal"
+        android:gravity="center_vertical|right"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/tv_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/y28"
+            android:textSize="@dimen/sp_14"
+            android:visibility="gone"
+            android:paddingLeft="@dimen/x14"
+            android:paddingRight="@dimen/x14"
+            android:gravity="center"
+            android:layout_marginRight="@dimen/x12"
+            android:layout_centerVertical="true"
+            android:textColor="#1F2736"
+            android:background="@drawable/selector_prompt_left"/>
+
+        <TextView
+            android:id="@+id/tv_right"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/y28"
+            android:textSize="@dimen/sp_14"
+            android:visibility="gone"
+            android:paddingLeft="@dimen/x14"
+            android:paddingRight="@dimen/x14"
+            android:gravity="center"
+            android:layout_marginRight="@dimen/x12"
+            android:textColor="@color/white"
+            android:background="@drawable/selector_prompt_right"/>
+
+
+    </LinearLayout>
+
+
+
+
+
+    <View
+        android:id="@+id/line"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_alignParentBottom="true"
+        android:background="#DEE4EA"/>
+
+</RelativeLayout>

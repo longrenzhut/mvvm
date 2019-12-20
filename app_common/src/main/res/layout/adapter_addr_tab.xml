@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:gravity="center_vertical"
+    android:layout_height="match_parent">
+
+
+    <TextView
+        android:id="@+id/mTvContent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/sp_14"
+        android:textColor="#111928"
+        android:layout_marginRight="@dimen/x30"/>
+
+
+    <RelativeLayout
+        android:id="@+id/mRlySelector"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:layout_marginRight="@dimen/x30"
+        >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/sp_14"
+        android:text="请选择"
+        android:layout_centerVertical="true"
+        android:textColor="#067C5F"
+        android:layout_marginRight="@dimen/x30"/>
+
+        <View
+            android:layout_width="@dimen/y42"
+            android:layout_height="@dimen/y2"
+            android:layout_alignParentBottom="true"
+            android:background="#067C5F"/>
+
+    </RelativeLayout>
+</LinearLayout>
