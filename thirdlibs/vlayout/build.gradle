@@ -21,7 +21,7 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
     implementation rootProject.ext.dependencies["androidx-appcompat"]
-    implementation rootProject.ext.dependencies["androidx-core"]
+//    implementation rootProject.ext.dependencies["androidx-core"]
 
     implementation rootProject.ext.dependencies["androidx-recyclerview"]
 }

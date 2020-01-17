@@ -34,8 +34,8 @@ dependencies {
 
     compile rootProject.ext.dependencies["androidx-appcompat"]
     compile rootProject.ext.dependencies["androidx-recyclerview"]
-    compile rootProject.ext.dependencies["androidx-core"]
-    compile rootProject.ext.dependencies["androidx-lifecycle"]
+//    compile rootProject.ext.dependencies["androidx-core"]
+//    compile rootProject.ext.dependencies["androidx-lifecycle"]
     //集成AROuter 阿里路由跳转
     compile rootProject.ext.dependencies["arouter-api"]
     //vLayout

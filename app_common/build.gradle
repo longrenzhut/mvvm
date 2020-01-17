@@ -40,8 +40,6 @@ dependencies {
     implementation rootProject.ext.dependencies["permission"]
     implementation rootProject.ext.dependencies["photoview"]
     compile rootProject.ext.dependencies["greendao"]
-
-
 }
 repositories {
     mavenCentral()

@@ -23,10 +23,6 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    //微信支付以及微信分享
-    implementation 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:5.3.1'
-
-//    kapt 'com.alibaba:arouter-compiler:1.0.3'
 
     implementation project(':thirdlibs:app_base')
     implementation rootProject.ext.dependencies["kotlin-stdlib"]
