@@ -2,7 +2,6 @@ package com.zhongcai.base.rxbus;
 
 import com.trello.rxlifecycle3.android.ActivityEvent;
 import com.trello.rxlifecycle3.android.FragmentEvent;
-import com.zhongcai.base.base.activity.AbsActivity;
 import com.zhongcai.base.base.fragment.AbsFragment;
 
 import io.reactivex.Flowable;

@@ -18,12 +18,13 @@ import java.util.concurrent.TimeoutException;
 
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.observers.DisposableObserver;
 
 /**
  * Created by Admininstanceoftrator on 2018/3/7.
  */
 
-abstract public class BaseSubscriber<T> implements Observer<T> {
+abstract public class BaseSubscriber<T> extends DisposableObserver<T> {
 
 
     public BaseSubscriber(){
@@ -59,16 +60,9 @@ abstract public class BaseSubscriber<T> implements Observer<T> {
         }
     }
 
-    protected Disposable mDisposable;
 
 
 
-
-    @Override
-    public void onSubscribe(Disposable d) {
-        this.mDisposable = d;
-
-    }
 
     @Override
     public void onError(Throwable e) {

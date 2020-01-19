@@ -1,21 +1,28 @@
 package com.zhongcai.base.base.activity;
 
-
-
-
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 
 import androidx.annotation.Nullable;
 
 import com.trello.rxlifecycle3.android.ActivityEvent;
+import com.zhongcai.base.R;
+import com.zhongcai.base.https.HttpProvider;
+import com.zhongcai.base.https.Params;
+import com.zhongcai.base.https.ReqCallBack;
+import com.zhongcai.base.https.ReqSubscriber;
+import com.zhongcai.base.theme.layout.HeaderLayout;
+import com.zhongcai.base.theme.layout.LoadingDialog;
+import com.zhongcai.base.theme.layout.StatusbarView;
+import com.zhongcai.base.theme.layout.UILoadLayout;
+import com.zhongcai.base.theme.statusbar.StatusBarCompat;
+import com.zhongcai.base.utils.BaseUtils;
+import com.zhongcai.base.utils.ScreenUtils;
 
 import io.reactivex.Observable;
 import io.reactivex.Observer;
@@ -23,31 +30,21 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.ResponseBody;
 
-import com.zhongcai.base.R;
-import com.zhongcai.base.https.HttpProvider;
-import com.zhongcai.base.https.Params;
-import com.zhongcai.base.https.ReqCallBack;
-import com.zhongcai.base.https.ReqSubscriber;
-import com.zhongcai.base.rxbinding.ViewClickOnSubscribe;
-import com.zhongcai.base.theme.layout.HeaderLayout;
-import com.zhongcai.base.theme.layout.LoadingDialog;
-import com.zhongcai.base.theme.layout.ProgressLayout;
-import com.zhongcai.base.theme.layout.PromptLayout;
-import com.zhongcai.base.theme.layout.StatusbarView;
-import com.zhongcai.base.theme.layout.UILoadLayout;
-import com.zhongcai.base.theme.statusbar.StatusBarCompat;
-import com.zhongcai.base.utils.BaseUtils;
-import com.zhongcai.base.utils.ScreenUtils;
-
-import java.util.concurrent.TimeUnit;
-
-/**
- * Created by zhutao on 2018/3/7.
- */
-
 abstract public class AbsActivity extends RxActivity {
 
-    public Intent mIntent;
+
+    /**
+     * 是否全屏 首页 启动页 等使用 覆盖方法设置为true
+     * @return
+     */
+    protected boolean isUseStatus(){
+        return true;
+    }
+
+    protected boolean isUseHeader() {
+        return true;
+    }
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -57,22 +54,18 @@ abstract public class AbsActivity extends RxActivity {
         if(getLayoutId() != 0)
             setContentView(getRootView());
 
-        mIntent = getIntent();
-
-        setPresenter();
         setStatusBar();
         initView(savedInstanceState);
-
     }
 
-
-    public boolean islightStatusBar(){
-        return true;
-    }
 
     /**
      * 设置状态栏 全屏
      */
+    public boolean islightStatusBar(){
+        return true;
+    }
+
     protected void setStatusBar() {
         setStatusBar(islightStatusBar());
     }
@@ -83,25 +76,6 @@ abstract public class AbsActivity extends RxActivity {
     }
 
 
-
-    /**
-     * 设置透明度
-     */
-    public void setAttr(float alph) {
-        WindowManager.LayoutParams windowLP = getWindow().getAttributes();
-        windowLP.dimAmount = alph;
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
-        getWindow().setAttributes(windowLP);
-    }
-
-
-//    public Observable<Integer> RxClick(View view){
-//        return Observable.create(new ViewClickOnSubscribe(view))
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .compose(this.<Integer>bindUntilEvent(ActivityEvent.DESTROY))
-//                .throttleFirst(500, TimeUnit.MILLISECONDS);
-//    }
 
 
     //统一的头部
@@ -115,10 +89,6 @@ abstract public class AbsActivity extends RxActivity {
      * 设置根容器  里面添加状态栏 头部 以及  进入界面加载动画
      */
     private View getRootView(){
-//        if(!isUseStatus() && !isUseHeader()){
-//            View contentView = LayoutInflater.from(this).inflate(getLayoutId(),null);
-//            return contentView;
-//        }
 
         mRootView = new RelativeLayout(this);
         mRootView.setLayoutParams(new ViewGroup.LayoutParams(-1,-1));
@@ -131,7 +101,7 @@ abstract public class AbsActivity extends RxActivity {
             mHeaderLayout = new HeaderLayout(this);
             mHeaderLayout.setTarget(this);
             RelativeLayout.LayoutParams headerlp = new RelativeLayout.LayoutParams(-1,-2);
-            headerlp.addRule(RelativeLayout.BELOW,R.id.statusbar);
+            headerlp.addRule(RelativeLayout.BELOW, R.id.statusbar);
             mHeaderLayout.setLayoutParams(headerlp);
             mRootView.addView(mHeaderLayout);
         }
@@ -145,7 +115,6 @@ abstract public class AbsActivity extends RxActivity {
         mRootView.addView(contentView,contentViewlp);
         return mRootView;
     }
-
 
     public UILoadLayout getUiLoad(){
         return mUiLayout;
@@ -166,11 +135,7 @@ abstract public class AbsActivity extends RxActivity {
                 }
             });
         }
-
         RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(-1, -1);
-//        if (isUseStatus()) {
-//            lp.addRule(RelativeLayout.BELOW, R.id.statusbar);
-//        }
         mRootView.addView(mUiLayout, lp);
         if(null != mUiLayout){
             mUiLayout.resetUi();
@@ -256,19 +221,32 @@ abstract public class AbsActivity extends RxActivity {
         }
     }
 
-    /**
-     * 是否全屏 首页 启动页 等使用 覆盖方法设置为true
-     * @return
-     */
-    protected boolean isUseStatus(){
-        return true;
+
+
+    public <T extends View> T findViewId(View view, int id) {
+        return (T) view.findViewById(id);
     }
 
-    protected boolean isUseHeader(){
-        return true;
+    public <T extends View> T findId(int id) {
+        return (T) findViewById(id);
     }
 
 
+
+    abstract public int getLayoutId();
+    abstract public void initView(Bundle savedInstanceState);
+
+    public void onIvLeftClick(){
+        finish();
+    }
+
+    public void onTvRightClick(){
+
+    }
+
+    public void onTvCancelClick(){
+
+    }
 
     //请求接口时
     protected LoadingDialog mLoadingDialog;
@@ -290,49 +268,6 @@ abstract public class AbsActivity extends RxActivity {
     }
 
 
-
-    /**
-     * 动态设置状态栏的颜色
-     * @param color
-     */
-    protected void setStatusBarColor(int color){
-        if(isUseStatus())
-            statusbarView.setBackgroundColor(getResources().getColor(color));
-    }
-
-
-
-    public <T extends View> T findVId(View view, int id) {
-        return (T) view.findViewById(id);
-    }
-
-    public <T extends View> T findId(int id) {
-        return (T) findViewById(id);
-    }
-
-
-
-    abstract public int getLayoutId();
-
-    protected void setPresenter(){
-
-    }
-    abstract public void initView(Bundle savedInstanceState);
-
-    public void onIvLeftClick(){
-        finish();
-    }
-
-    public void onTvRightClick(){
-
-    }
-
-    public void onTvCancelClick(){
-
-    }
-
-
-
     public  void request(Observable<ResponseBody> observable,
                          Observer observer){
 //        if(null == BaseApp.getSModel())
@@ -345,7 +280,7 @@ abstract public class AbsActivity extends RxActivity {
     }
 
 
-    public  <T> void post(Observable<ResponseBody> observable,ReqCallBack<T> callBack){
+    public  <T> void post(Observable<ResponseBody> observable, ReqCallBack<T> callBack){
         callBack.setUILayout(getUiLoad());
 
         callBack.setLoading(getLoading());
@@ -363,48 +298,6 @@ abstract public class AbsActivity extends RxActivity {
     public  <T> void postP(String url, Params params, ReqCallBack<T> callBack){
 
         post(HttpProvider.createPService().post(url,params.getBody()), callBack);
-    }
-
-//    public  <T> void postV(String url, Params params, ReqCallBack<T> callBack){
-//
-//        post(HttpProvider.createVService().post(url,params.getBody()), callBack);
-//    }
-
-    protected ProgressLayout mProgress;
-    public void setProgress(){
-
-        if(null == mProgress) {
-            mProgress = new ProgressLayout(this);
-            mProgress.setRxBus(this);
-            RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(-1, -2);
-            lp.addRule(RelativeLayout.BELOW, R.id.header);
-            mRootView.addView(mProgress, lp);
-        }
-    }
-
-
-
-    protected PromptLayout mPrompt;
-    public void setPrompt(){
-        if(null == mPrompt) {
-            mPrompt = new PromptLayout(this);
-            RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(-1, -2);
-            lp.addRule(RelativeLayout.BELOW, R.id.header);
-            mRootView.addView(mPrompt, lp);
-            mPrompt.setRxBus(this);
-        }
-    }
-
-
-
-
-    @Override
-    protected void onResume(){
-        super.onResume();
-    }
-    @Override
-    protected void onPause(){
-        super.onPause();
     }
 
 }

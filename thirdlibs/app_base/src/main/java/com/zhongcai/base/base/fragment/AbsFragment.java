@@ -11,7 +11,6 @@ import androidx.annotation.Nullable;
 
 import com.trello.rxlifecycle3.android.FragmentEvent;
 import com.zhongcai.base.R;
-import com.zhongcai.base.base.activity.AbsActivity;
 import com.zhongcai.base.theme.layout.HeaderLayout;
 import com.zhongcai.base.theme.layout.StatusbarView;
 import com.zhongcai.base.theme.layout.UILoadLayout;

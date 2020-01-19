@@ -9,7 +9,6 @@ import android.widget.ProgressBar;
 
 import com.tencent.smtt.sdk.WebChromeClient;
 import com.tencent.smtt.sdk.WebView;
-import com.zhongcai.base.base.activity.AbsActivity;
 import com.zhongcai.common.R;
 
 

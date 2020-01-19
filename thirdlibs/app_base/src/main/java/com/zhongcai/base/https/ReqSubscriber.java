@@ -18,24 +18,11 @@ import okhttp3.ResponseBody;
 public class ReqSubscriber<T> extends BaseSubscriber<ResponseBody> {
 
     private ReqCallBack<T> callBack;
-    private CompositeDisposable compositeDisposable;
 
     public ReqSubscriber(ReqCallBack<T> callBack){
         this.callBack = callBack;
     }
 
-
-    public ReqSubscriber(ReqCallBack<T> callBack,CompositeDisposable compositeDisposable){
-        this.callBack = callBack;
-        this.compositeDisposable = compositeDisposable;
-    }
-
-    @Override
-    public void onSubscribe(Disposable d) {
-        super.onSubscribe(d);
-        if(null != compositeDisposable)
-            compositeDisposable.add(d);
-    }
 
     @Override
     public void onNext(ResponseBody responseBody) {

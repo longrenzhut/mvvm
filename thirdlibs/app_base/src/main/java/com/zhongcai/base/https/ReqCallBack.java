@@ -1,7 +1,10 @@
 package com.zhongcai.base.https;
 
 
+import androidx.lifecycle.ViewModel;
+
 import com.google.gson.Gson;
+import com.zhongcai.base.base.viewmodel.BaseViewModel;
 import com.zhongcai.base.rxbus.RxBus;
 import com.zhongcai.base.theme.layout.LoadingDialog;
 import com.zhongcai.base.theme.layout.UILoadLayout;
@@ -21,14 +24,8 @@ import java.lang.reflect.Type;
 
  abstract public class ReqCallBack<T> implements IReqCallBack<T> {
 
-    private UILoadLayout mLayout;
+    private BaseViewModel mViewModel;
 
-    public void setUILayout(UILoadLayout mLayout){
-        if(null != mLayout){
-            WeakReference<UILoadLayout> weak = new WeakReference<>(mLayout);
-            this.mLayout = weak.get();
-        }
-    }
 
     private boolean isToast = true;
 
@@ -42,14 +39,12 @@ import java.lang.reflect.Type;
         return this;
     }
 
-    private LoadingDialog mLoading;
 
-    public void setLoading(LoadingDialog mLoading){
-        if(null != mLoading){
-            WeakReference<LoadingDialog> weak = new WeakReference(mLoading);
-            this.mLoading = weak.get();
-        }
+    public ReqCallBack<T> setViewModel(BaseViewModel viewModel){
+        this.mViewModel = mViewModel;
+        return this;
     }
+
 
 
     private boolean ispaging = false;
@@ -126,41 +121,35 @@ import java.lang.reflect.Type;
             OnSuccess(result);
         }
 
-        if(null != mLayout)
-            mLayout.loadok();
-
+        if(null != mViewModel)
+            mViewModel.hideUILoading();
     }
 
     @Override
     public void OnFailed(int code) {
-        if(code == 12100 || code == 12300 || code == 12400){
-            RxBus.instance().post(21,1);
-        } else if(code == 12700){
-            RxBus.instance().post(21,2);
-        }else if(code == 13100){
-            RxBus.instance().post(13100,0);
-        }
-        if(null != mLayout)
-            mLayout.loadok();
-
+//        if(code == 12100 || code == 12300 || code == 12400){
+//            RxBus.instance().post(21,1);
+//        }
+        if(null != mViewModel)
+            mViewModel.hideUILoading();
     }
 
     @Override
     public void OnFailed(int code,String msg) {
-        if(null != mLayout)
-            mLayout.loadok();
+        if(null != mViewModel)
+            mViewModel.hideUILoading();
     }
 
     @Override
     public void onError(Throwable e) {
-        if(null != mLayout)
-            mLayout.loadFailed();
+        if(null != mViewModel)
+            mViewModel.errorUILoading();
     }
 
     @Override
     public void onCompleted() {
-        if(null != mLoading)
-            mLoading.dismiss();
+        if(null != mViewModel)
+            mViewModel.dismissLoading();
     }
 
     @Override

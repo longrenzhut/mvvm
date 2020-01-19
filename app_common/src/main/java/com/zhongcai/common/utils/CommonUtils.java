@@ -1,9 +1,11 @@
 package com.zhongcai.common.utils;
 
+import android.app.Activity;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.graphics.drawable.Drawable;
+import android.view.WindowManager;
 
 import com.google.gson.Gson;
 import com.zhongcai.base.base.application.BaseApplication;
@@ -242,6 +244,17 @@ public class CommonUtils {
             sb.append(str.charAt(number));
         }
         return sb.toString();
+    }
+
+
+    /**
+     * 设置透明度
+     */
+    public static void setAttr(Activity activity,float alph) {
+        WindowManager.LayoutParams windowLP = activity.getWindow().getAttributes();
+        windowLP.dimAmount = alph;
+        activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        activity.getWindow().setAttributes(windowLP);
     }
 
 }

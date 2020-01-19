@@ -1,7 +1,5 @@
 package zhongcai.common.helper.router
 
-import com.zhongcai.base.base.activity.AbsActivity
-
 import com.zhongcai.base.router.Router
 import com.zhongcai.common.helper.router.Paths
 

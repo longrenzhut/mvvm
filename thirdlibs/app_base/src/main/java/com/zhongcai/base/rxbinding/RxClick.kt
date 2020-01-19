@@ -17,7 +17,7 @@ object RxClick {
 
 
     @SuppressLint("CheckResult")
-    fun click(activity: AbsActivity, view: View?,onclick: (view: View)-> Unit){
+    fun click(activity: AbsActivity, view: View?, onclick: (view: View)-> Unit){
         Observable.create(ViewClickOnSubscribe(view))
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())

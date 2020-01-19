@@ -7,7 +7,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.zhongcai.base.R;
-import com.zhongcai.base.base.activity.AbsActivity;
 import com.zhongcai.base.rxbus.RxBus;
 import com.zhongcai.base.utils.BaseUtils;
 

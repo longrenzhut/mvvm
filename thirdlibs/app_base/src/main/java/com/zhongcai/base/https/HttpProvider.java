@@ -266,7 +266,7 @@ public class HttpProvider {
                 .compose(abs.bindUntilEvent(ActivityEvent.DESTROY))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(new ReqSubscriber(callBack,compositeDisposable));
+                .subscribe(new ReqSubscriber(callBack));
 
     }
 
