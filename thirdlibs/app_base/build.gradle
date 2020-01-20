@@ -46,6 +46,7 @@ dependencies {
     compile rootProject.ext.dependencies["anko-common"]
     //下拉刷新库
     compile rootProject.ext.dependencies["ultra-ptr"]
+    compile rootProject.ext.dependencies["androidx-lifecycle"]
 }
 repositories {
     mavenCentral()

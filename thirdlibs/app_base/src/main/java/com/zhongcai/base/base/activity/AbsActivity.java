@@ -9,13 +9,10 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 
 import androidx.annotation.Nullable;
+import androidx.lifecycle.ViewModelProviders;
 
-import com.trello.rxlifecycle3.android.ActivityEvent;
 import com.zhongcai.base.R;
-import com.zhongcai.base.https.HttpProvider;
-import com.zhongcai.base.https.Params;
-import com.zhongcai.base.https.ReqCallBack;
-import com.zhongcai.base.https.ReqSubscriber;
+import com.zhongcai.base.base.viewmodel.BaseViewModel;
 import com.zhongcai.base.theme.layout.HeaderLayout;
 import com.zhongcai.base.theme.layout.LoadingDialog;
 import com.zhongcai.base.theme.layout.StatusbarView;
@@ -23,12 +20,6 @@ import com.zhongcai.base.theme.layout.UILoadLayout;
 import com.zhongcai.base.theme.statusbar.StatusBarCompat;
 import com.zhongcai.base.utils.BaseUtils;
 import com.zhongcai.base.utils.ScreenUtils;
-
-import io.reactivex.Observable;
-import io.reactivex.Observer;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
-import okhttp3.ResponseBody;
 
 abstract public class AbsActivity extends RxActivity {
 
@@ -55,7 +46,12 @@ abstract public class AbsActivity extends RxActivity {
             setContentView(getRootView());
 
         setStatusBar();
+
+        setViewModel();
+
         initView(savedInstanceState);
+
+
     }
 
 
@@ -234,6 +230,17 @@ abstract public class AbsActivity extends RxActivity {
 
 
     abstract public int getLayoutId();
+
+    public void setViewModel(){}
+
+    public  <T extends BaseViewModel> T LViewModelProviders(Class<T> tClass){
+        return ViewModelProviders.of(this).get(tClass);
+    }
+
+    public void observe(){
+
+    }
+
     abstract public void initView(Bundle savedInstanceState);
 
     public void onIvLeftClick(){
@@ -263,41 +270,9 @@ abstract public class AbsActivity extends RxActivity {
             mLoadingDialog.dismiss();
     }
 
-    public LoadingDialog getLoading(){
-        return mLoadingDialog;
-    }
 
 
-    public  void request(Observable<ResponseBody> observable,
-                         Observer observer){
-//        if(null == BaseApp.getSModel())
-//            return;
-
-        observable.compose(bindUntilEvent(ActivityEvent.DESTROY))
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(observer);
-    }
 
 
-    public  <T> void post(Observable<ResponseBody> observable, ReqCallBack<T> callBack){
-        callBack.setUILayout(getUiLoad());
-
-        callBack.setLoading(getLoading());
-
-        request(observable,
-                new ReqSubscriber(callBack));
-    }
-
-
-    public <T> void postJ(String url, Params params, ReqCallBack<T> callBack){
-
-        post(HttpProvider.getHttp().createJService().post(url,params.getBody()), callBack);
-    }
-
-    public  <T> void postP(String url, Params params, ReqCallBack<T> callBack){
-
-        post(HttpProvider.createPService().post(url,params.getBody()), callBack);
-    }
 
 }

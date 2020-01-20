@@ -1,9 +1,12 @@
 package com.zhongcai.base.https;
 
 
+import android.net.ParseException;
+
 import androidx.lifecycle.ViewModel;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonParseException;
 import com.zhongcai.base.base.viewmodel.BaseViewModel;
 import com.zhongcai.base.rxbus.RxBus;
 import com.zhongcai.base.theme.layout.LoadingDialog;
@@ -41,7 +44,7 @@ import java.lang.reflect.Type;
 
 
     public ReqCallBack<T> setViewModel(BaseViewModel viewModel){
-        this.mViewModel = mViewModel;
+        this.mViewModel = viewModel;
         return this;
     }
 
@@ -117,8 +120,15 @@ import java.lang.reflect.Type;
             OnSuccess((T)value);
         }
         else {
-            T result = new Gson().fromJson(value, modelType);
-            OnSuccess(result);
+            try {
+                T result = new Gson().fromJson(value, modelType);
+                OnSuccess(result);
+            }catch (JsonParseException e){
+                e.printStackTrace();
+            }
+            catch (ParseException e){
+                e.printStackTrace();
+            }
         }
 
         if(null != mViewModel)

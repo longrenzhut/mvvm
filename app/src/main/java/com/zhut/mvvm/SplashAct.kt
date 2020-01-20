@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.provider.Settings
 import androidx.annotation.Nullable
+import com.zhongcai.base.base.activity.AbsActivity
 import com.zhongcai.common.helper.cache.CacheHelper
 import com.zhongcai.common.helper.cache.Caches
 import com.zhongcai.common.helper.permission.OnPermission

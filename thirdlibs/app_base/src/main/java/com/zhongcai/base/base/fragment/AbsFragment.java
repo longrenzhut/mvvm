@@ -11,6 +11,7 @@ import androidx.annotation.Nullable;
 
 import com.trello.rxlifecycle3.android.FragmentEvent;
 import com.zhongcai.base.R;
+import com.zhongcai.base.base.activity.AbsActivity;
 import com.zhongcai.base.theme.layout.HeaderLayout;
 import com.zhongcai.base.theme.layout.StatusbarView;
 import com.zhongcai.base.theme.layout.UILoadLayout;
@@ -121,16 +122,6 @@ abstract public class AbsFragment extends RxFragment{
      * 设置根容器  里面添加状态栏 头部 以及  进入界面加载动画
      */
     protected void setUiLoadLayout(){
-//        if(mRootView == null){
-//            mUiLayout = findId(R.id.uiloadlayout);
-//            mUiLayout.setOnloadListener(new UILoadLayout.OnLoadListener() {
-//                @Override
-//                public void load() {
-//                    request();
-//                }
-//            });
-//            return;
-//        }
         if(null == mUiLayout) {
             mUiLayout = new UILoadLayout(mContext);
             mUiLayout.sethasTop(false);
@@ -142,9 +133,6 @@ abstract public class AbsFragment extends RxFragment{
             });
 
             RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(-1, -1);
-//        if(isUseStatus()){
-//            lp.addRule(RelativeLayout.BELOW,R.id.statusbar);
-//        }
             mRootView.addView(mUiLayout, lp);
         }
         if(null != mUiLayout){
@@ -159,7 +147,7 @@ abstract public class AbsFragment extends RxFragment{
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        setPresenter();
+        setViewModel();
         initView(savedInstanceState);
     }
 
@@ -175,7 +163,7 @@ abstract public class AbsFragment extends RxFragment{
 //        initView();
     }
 
-    public <T extends View> T findVId(View view, int id) {
+    public <T extends View> T findViewId(View view, int id) {
         return (T) view.findViewById(id);
     }
 
@@ -228,7 +216,7 @@ abstract public class AbsFragment extends RxFragment{
 
     abstract public void initView(Bundle savedInstanceState);
 
-    protected void setPresenter(){
+    protected void setViewModel(){
 
     }
 
@@ -236,31 +224,6 @@ abstract public class AbsFragment extends RxFragment{
         return mUiLayout;
     }
 
-
-    public void request(Observable<ResponseBody> observable,
-                        Observer observer){
-//        if(null == BaseApp.getSModel())
-//            return;
-
-        observable.compose(bindUntilEvent(FragmentEvent.DESTROY))
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(observer);
-    }
-
-    protected boolean isUseUmsPause(){
-        return  true;
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
 
 
 

@@ -1,4 +1,4 @@
-package com.zhongcai.base.base.fragment;
+package com.zhongcai.base.base.activity;
 
 
 import androidx.lifecycle.Observer;
@@ -6,10 +6,8 @@ import androidx.lifecycle.Observer;
 import com.zhongcai.base.base.viewmodel.BaseActionEvent;
 import com.zhongcai.base.base.viewmodel.BaseViewModel;
 
-/**
- * Created by Administrator on 2018/3/7.
- */
-abstract public class BaseFragment<T extends BaseViewModel> extends AbsFragment {
+abstract public class BaseAcivity<T extends BaseViewModel> extends AbsActivity {
+
 
     protected T mViewModel;
 
@@ -37,5 +35,4 @@ abstract public class BaseFragment<T extends BaseViewModel> extends AbsFragment 
     }
 
     abstract public  T getViewModel();
-
 }

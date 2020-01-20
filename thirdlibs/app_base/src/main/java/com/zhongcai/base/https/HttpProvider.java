@@ -17,6 +17,7 @@ import javax.net.ssl.X509TrustManager;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
@@ -178,12 +179,12 @@ public class HttpProvider {
     }
 
 
-    public static BaseService createPService(){
+    public  BaseService createPService(){
         return getHttp().buildRetrofit(getPhpUrl()).create(BaseService.class);
     }
 
 
-    public static BaseService createJService(){
+    public  BaseService createJService(){
         return getHttp().buildRetrofit(getJavaUrl()).create(BaseService.class);
     }
 
@@ -248,21 +249,20 @@ public class HttpProvider {
         return builder.client(upFileBuilder.build()).baseUrl(url).build();
     }
 
-    public static BaseFileService upFile(String baseUrl){
+    public  BaseFileService upFile(String baseUrl){
         return getHttp().createUpFileRetrofit(baseUrl).create(BaseFileService.class);
     }
 
-    public static BaseFileService createUpService(){
+    public  BaseFileService createUpService(){
 
         return upFile(getLoadingUrl());
     }
 
 
 
-    public <T> void  upFile(AbsActivity abs, String url, UpFileParam params, ReqCallBack<T> callBack,
-                            CompositeDisposable compositeDisposable){
+    public <T> void  upFile(AbsActivity abs, String url, UpFileParam params, ReqCallBack<T> callBack){
 
-        HttpProvider.createUpService().upFile(url, params.getMap())
+        createUpService().upFile(url, params.getMap())
                 .compose(abs.bindUntilEvent(ActivityEvent.DESTROY))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
@@ -270,18 +270,22 @@ public class HttpProvider {
 
     }
 
-    public <T> void  postP(String url, Params params, ReqCallBack<T> callBack){
-        createPService().post(url,params.getBody())
+    public <T> Disposable postP(String url, Params params, ReqCallBack<T> callBack){
+        Disposable disposable =  createPService().post(url,params.getBody())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(new ReqSubscriber(callBack));
+                .subscribeWith(new ReqSubscriber(callBack));
+
+        return disposable;
     }
 
-    public <T> void postJ(String url, Params params, ReqCallBack<T> callBack){
-        createJService().post(url,params.getBody())
+    public <T> Disposable postJ(String url, Params params, ReqCallBack<T> callBack){
+        Disposable disposable =  createJService().post(url,params.getBody())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(new ReqSubscriber(callBack));
+                .subscribeWith(new ReqSubscriber(callBack));
+
+        return disposable;
     }
 
 

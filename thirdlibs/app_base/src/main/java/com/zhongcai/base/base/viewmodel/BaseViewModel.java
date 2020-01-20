@@ -1,41 +1,20 @@
 package com.zhongcai.base.base.viewmodel;
 
-import androidx.lifecycle.LifecycleOwner;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.zhongcai.base.https.HttpProvider;
 import com.zhongcai.base.https.Params;
 import com.zhongcai.base.https.ReqCallBack;
-import com.zhongcai.base.https.ReqSubscriber;
 
-import io.reactivex.Observable;
-import io.reactivex.Observer;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
-import okhttp3.ResponseBody;
 
 public class BaseViewModel extends ViewModel implements IViewModelAction{
 
     private CompositeDisposable mCompositeDisposable;
 
-    void request(Observable<ResponseBody> observable,
-                         Observer observer){
-        if(null == mCompositeDisposable)
-            mCompositeDisposable = new CompositeDisposable();
 
-        Disposable disposable =  (Disposable)observable
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribeWith(observer);
-
-        mCompositeDisposable.add(disposable);
-    }
-
-     void dispose() {
+    void dispose() {
         if (!mCompositeDisposable.isDisposed()) {
             mCompositeDisposable.dispose();
         }
@@ -52,23 +31,34 @@ public class BaseViewModel extends ViewModel implements IViewModelAction{
     }
 
     protected <T> void postJ(String url, Params params, ReqCallBack<T> callBack){
+        if(null == mCompositeDisposable)
+            mCompositeDisposable = new CompositeDisposable();
 
-        request(HttpProvider.createJService().post(url,params.getBody()),
-                new ReqSubscriber<>(callBack.setViewModel(this)));
+        mCompositeDisposable.add(
+                HttpProvider.getHttp().postJ(url,params,callBack.setViewModel(this))
+        );
     }
 
 
     protected <T> void postP(String url, Params params, ReqCallBack<T> callBack){
-        request(HttpProvider.createPService().post(url,params.getBody()),
-                new ReqSubscriber<>(callBack.setViewModel(this)));
+        if(null == mCompositeDisposable)
+            mCompositeDisposable = new CompositeDisposable();
+
+        mCompositeDisposable.add(
+                HttpProvider.getHttp().postP(url,params,callBack.setViewModel(this))
+        );
     }
+
 
 
     private MutableLiveData<BaseActionEvent> mActionLiveData;
 
 
-    public BaseViewModel() {
-        mActionLiveData = new MutableLiveData<>();
+    @Override
+    public MutableLiveData<BaseActionEvent> getActionLiveData() {
+        if(null == mActionLiveData)
+            mActionLiveData = new MutableLiveData<>();
+        return mActionLiveData;
     }
 
 
@@ -93,11 +83,6 @@ public class BaseViewModel extends ViewModel implements IViewModelAction{
         mActionLiveData.setValue(baseActionEvent);
     }
 
-
-    @Override
-    public MutableLiveData<BaseActionEvent> getActionLiveData() {
-        return mActionLiveData;
-    }
 
 
 }

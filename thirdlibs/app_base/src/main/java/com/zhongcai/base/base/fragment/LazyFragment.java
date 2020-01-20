@@ -3,14 +3,14 @@ package com.zhongcai.base.base.fragment;
 import android.os.Bundle;
 import android.view.View;
 
-import com.zhongcai.base.base.presenter.BasePresenter;
+import com.zhongcai.base.base.viewmodel.BaseViewModel;
 
 /**
  * Created by zhutao on 2018/3/16.
  * 懒加载 当使用viewpager 时候用到
  */
 
-abstract public class LazyFragment<V extends BasePresenter> extends AbsFragment {
+abstract public class LazyFragment<V extends BaseViewModel> extends AbsFragment {
 
 
     //Fragment的View加载完毕的标记
@@ -19,6 +19,8 @@ abstract public class LazyFragment<V extends BasePresenter> extends AbsFragment 
 
     //Fragment对用户可见的标记
     private  boolean isUIVisible = false;
+
+
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
@@ -59,35 +61,16 @@ abstract public class LazyFragment<V extends BasePresenter> extends AbsFragment 
     public abstract void lazyLoad();
 
 
-    protected V mPresenter;
+    protected V mViewModel;
 
     @Override
-    protected void setPresenter(){
-        mPresenter = getPresenter();
-        mPresenter.attachActivity(mContext);
-        mPresenter.attachFragment(this);
+    protected void setViewModel(){
+        mViewModel = getViewModel();
     }
 
-    protected abstract V getPresenter();
+    protected abstract V getViewModel();
 
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if (mPresenter != null)
-            mPresenter.detachView();
-    }
-
-    @Override
-    protected boolean isUseUmsPause() {
-        return false;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        mPresenter.onResume();
-    }
 
     @Override
     public void onHiddenChanged(boolean hidden) {
