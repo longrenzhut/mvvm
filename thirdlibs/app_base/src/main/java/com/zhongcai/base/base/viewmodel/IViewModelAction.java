@@ -8,10 +8,16 @@ public interface IViewModelAction {
 
     void hideUILoading();
 
-    void dismissLoading();
+    void onCompleted();
 
 
     MutableLiveData<BaseActionEvent> getActionLiveData();
+    MutableLiveData<BaseActionEvent> getCallBackLiveData();
+
+
+    void OnFailed(int code);
+
+    void onError();
 
 
 }

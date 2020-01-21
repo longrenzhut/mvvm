@@ -9,7 +9,7 @@
         android:name="com.zhongcai.common.ui.application.CommonApp"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".SplashAct"
+        <activity android:name=".activity.SplashAct"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -18,7 +18,7 @@
         </activity>
 
 
-        <activity android:name=".MainAct"
+        <activity android:name=".activity.MainAct"
             android:screenOrientation="portrait"
             android:launchMode="singleTask"
             />

@@ -16,7 +16,7 @@ abstract public class BaseFragment<T extends BaseViewModel> extends AbsFragment 
     @Override
     public void setViewModel() {
         mViewModel = getViewModel();
-        mViewModel.getActionLiveData().observe(this, new Observer<BaseActionEvent>() {
+        observe(mViewModel.getActionLiveData(), new Observer<BaseActionEvent>() {
             @Override
             public void onChanged(BaseActionEvent baseActionEvent) {
                 switch (baseActionEvent.getAction()){
@@ -30,6 +30,21 @@ abstract public class BaseFragment<T extends BaseViewModel> extends AbsFragment 
                         break;
                     case BaseActionEvent.loading_onCompleted:
                         dismiss();
+                        onCompleted();
+                        break;
+                }
+            }
+        });
+
+        observe(mViewModel.getCallBackLiveData(), new Observer<BaseActionEvent>() {
+            @Override
+            public void onChanged(BaseActionEvent baseActionEvent) {
+                switch (baseActionEvent.getAction()){
+                    case BaseActionEvent.failed:
+                        onFailed(baseActionEvent.getCode());
+                        break;
+                    case BaseActionEvent.error:
+                        onError();
                         break;
                 }
             }
@@ -38,4 +53,16 @@ abstract public class BaseFragment<T extends BaseViewModel> extends AbsFragment 
 
     abstract public  T getViewModel();
 
+
+    protected void onCompleted(){
+
+    }
+
+    protected void onError(){
+
+    }
+
+    protected void onFailed(int code){
+
+    }
 }

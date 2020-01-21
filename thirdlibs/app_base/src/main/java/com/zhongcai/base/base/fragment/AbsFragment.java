@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 import androidx.annotation.Nullable;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
 
 import com.trello.rxlifecycle3.android.FragmentEvent;
 import com.zhongcai.base.R;
@@ -18,7 +20,6 @@ import com.zhongcai.base.theme.layout.UILoadLayout;
 import com.zhongcai.base.utils.BaseUtils;
 
 import io.reactivex.Observable;
-import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.ResponseBody;
@@ -220,9 +221,10 @@ abstract public class AbsFragment extends RxFragment{
 
     }
 
-    public UILoadLayout getUiLoad(){
-        return mUiLayout;
+    protected <V> void observe(LiveData<V> liveData, Observer<V> v){
+        liveData.observe(this,v);
     }
+
 
 
 

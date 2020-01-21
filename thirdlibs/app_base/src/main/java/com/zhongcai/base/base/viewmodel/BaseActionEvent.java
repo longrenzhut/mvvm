@@ -9,18 +9,22 @@ public class BaseActionEvent extends BaseEvent {
     public static final int loading_onCompleted = 3;
 
 
+    public static final int error = 4;
 
-    private String mMessage;
+    public static final int failed = 5;
+
+
+    private int code;
 
     public BaseActionEvent(int action) {
         super(action);
     }
 
-    public String getMessage() {
-        return mMessage;
+    public int getCode() {
+        return code;
     }
 
-    public void setMessage(String message) {
-        mMessage = message;
+    public void setCode(int code) {
+        this.code = code;
     }
 }

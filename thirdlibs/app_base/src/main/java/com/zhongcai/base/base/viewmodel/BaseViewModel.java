@@ -6,8 +6,19 @@ import androidx.lifecycle.ViewModel;
 import com.zhongcai.base.https.HttpProvider;
 import com.zhongcai.base.https.Params;
 import com.zhongcai.base.https.ReqCallBack;
+import com.zhongcai.base.https.zip.BaseBiFunction;
+import com.zhongcai.base.https.zip.BaseFunction3;
+import com.zhongcai.base.https.zip.BaseFunction4;
+import com.zhongcai.base.https.zip.ReqZip3Subscriber;
+import com.zhongcai.base.https.zip.ReqZip4Subscriber;
+import com.zhongcai.base.https.zip.ReqZipSubscriber;
 
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+import okhttp3.ResponseBody;
 
 public class BaseViewModel extends ViewModel implements IViewModelAction{
 
@@ -15,9 +26,15 @@ public class BaseViewModel extends ViewModel implements IViewModelAction{
 
 
     void dispose() {
-        if (!mCompositeDisposable.isDisposed()) {
+        if (null != mCompositeDisposable &&!mCompositeDisposable.isDisposed()) {
             mCompositeDisposable.dispose();
         }
+    }
+
+    private void addDisposable(Disposable disposable){
+        if(null == mCompositeDisposable)
+            mCompositeDisposable = new CompositeDisposable();
+        mCompositeDisposable.add(disposable);
     }
 
     //1.MutableLiveData的父类是LiveData
@@ -30,26 +47,50 @@ public class BaseViewModel extends ViewModel implements IViewModelAction{
         super.onCleared();
     }
 
-    protected <T> void postJ(String url, Params params, ReqCallBack<T> callBack){
-        if(null == mCompositeDisposable)
-            mCompositeDisposable = new CompositeDisposable();
 
-        mCompositeDisposable.add(
+    protected <T> void postJ(String url, Params params, ReqCallBack<T> callBack){
+
+        addDisposable(
                 HttpProvider.getHttp().postJ(url,params,callBack.setViewModel(this))
         );
     }
 
 
     protected <T> void postP(String url, Params params, ReqCallBack<T> callBack){
-        if(null == mCompositeDisposable)
-            mCompositeDisposable = new CompositeDisposable();
 
-        mCompositeDisposable.add(
+        addDisposable(
                 HttpProvider.getHttp().postP(url,params,callBack.setViewModel(this))
         );
     }
 
+    //---------------------- 当需要使用onEorror 独立调用
 
+    private MutableLiveData<BaseActionEvent> mActionLiveDataCallBack;
+
+    @Override
+    public MutableLiveData<BaseActionEvent> getCallBackLiveData() {
+        if(null == mActionLiveDataCallBack)
+            mActionLiveDataCallBack = new MutableLiveData<>();
+        return mActionLiveDataCallBack;
+    }
+
+
+    @Override
+    public void OnFailed(int code) {
+        BaseActionEvent baseActionEvent = new BaseActionEvent(BaseActionEvent.failed);
+        baseActionEvent.setCode(code);
+        mActionLiveDataCallBack.setValue(baseActionEvent);
+    }
+
+    @Override
+    public void onError() {
+        BaseActionEvent baseActionEvent = new BaseActionEvent(BaseActionEvent.error);
+        mActionLiveDataCallBack.setValue(baseActionEvent);
+    }
+
+
+
+    //---------------------------------------
 
     private MutableLiveData<BaseActionEvent> mActionLiveData;
 
@@ -76,13 +117,75 @@ public class BaseViewModel extends ViewModel implements IViewModelAction{
         mActionLiveData.setValue(baseActionEvent);
     }
 
-
     @Override
-    public void dismissLoading() {
+    public void onCompleted() {
         BaseActionEvent baseActionEvent = new BaseActionEvent(BaseActionEvent.loading_onCompleted);
         mActionLiveData.setValue(baseActionEvent);
     }
 
+
+
+
+    /**
+     * 2个接口合并请求
+     */
+    protected <S,R> void zipPost(Observable<ResponseBody> s, Observable<ResponseBody> r,
+                                 ReqCallBack<S> callBack1, ReqCallBack<R> callBack2){
+
+
+        Disposable disposable = Observable.zip(s, r, new BaseBiFunction())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribeWith(new ReqZipSubscriber<>(callBack1.setViewModel(this),callBack2));
+
+        addDisposable(disposable);
+    }
+
+    /**
+     * 3个接口合并请求
+     */
+    protected <S,R,H> void zipPost(Observable<ResponseBody> s, Observable<ResponseBody> r,Observable<ResponseBody> t,
+                                   ReqCallBack<S> callBack1, ReqCallBack<R> callBack2, ReqCallBack<H> callBack3){
+
+
+        Disposable disposable = Observable.zip(s, r,t, new BaseFunction3())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribeWith(new ReqZip3Subscriber<>(callBack1.setViewModel(this),callBack2,callBack3));
+
+        addDisposable(disposable);
+    }
+
+    /**
+     * 4个接口合并请求
+     */
+    protected <T,R,S,H> void zipPost(Observable<ResponseBody> t,
+                                     Observable<ResponseBody> r,
+                                     Observable<ResponseBody> s,
+                                     Observable<ResponseBody> h,
+                                     ReqCallBack<T> callBack1,
+                                     ReqCallBack<R> callBack2,
+                                     ReqCallBack<S> callBack3,
+                                     ReqCallBack<H> callBack4){
+
+
+        Disposable disposable = Observable.zip(t,r,s,h,new BaseFunction4())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribeWith(new ReqZip4Subscriber<>(callBack1.setViewModel(this),callBack2,callBack3,callBack4));
+
+        addDisposable(disposable);
+    }
+
+
+    protected Observable<ResponseBody> postJResponseBody(String url,Params params){
+        return HttpProvider.getHttp().createJService().post(url,params.getBody());
+    }
+
+
+    protected Observable<ResponseBody> postPResponseBody(String url,Params params){
+        return HttpProvider.getHttp().createPService().post(url,params.getBody());
+    }
 
 
 }

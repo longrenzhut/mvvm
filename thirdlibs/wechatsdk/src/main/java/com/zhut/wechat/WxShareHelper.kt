@@ -57,9 +57,9 @@ class WxShareHelper {
                     if (getBitmapsize(it) / 1024 <= 25) {
                         getBitmap(it)
                     } else {
+
                         doAsync {
-                            val result = CompUtils.comp(it, w, h)
-                            getBitmap(result)
+                            getBitmap(CompUtils.compressMatrix(it))
                         }
                     }
                 }

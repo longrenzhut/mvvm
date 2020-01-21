@@ -32,7 +32,8 @@ public class ReqSubscriber<T> extends BaseSubscriber<ResponseBody> {
             String resultData = AESHexEncrypt.decrypt(value, AESHexEncrypt.KEY);//解密
 
             if(resultData == null){
-                callBack.onError(null);
+                if(null != callBack)
+                    callBack.onError(null);
                 ToastUtils.showToast("解析错误");
                 return;
             }
@@ -46,20 +47,26 @@ public class ReqSubscriber<T> extends BaseSubscriber<ResponseBody> {
                 int subCode = data.optInt("subCode");
                 if(subCode == 10000){
                     String result = data.optString("result");
-                    callBack.OnSuccessJson(data);
-                    callBack.onNext(result);
+                    if(null != callBack) {
+                        callBack.OnSuccessJson(data);
+                        callBack.onNext(result);
+                    }
                 }else {
                     //逻辑业务处理提示
-                    if(callBack.isToast())
-                        ToastUtils.showToast(data.optString("subMsg"));
-                    callBack.OnFailed(subCode);
-                    callBack.OnFailed(subCode,data.optString("subMsg"));
+                    if(null != callBack) {
+                        if (callBack.isToast())
+                            ToastUtils.showToast(data.optString("subMsg"));
+                        callBack.OnFailed(subCode);
+                        callBack.OnFailed(subCode, data.optString("subMsg"));
+                    }
                 }
             } else{
                 //服务器错误提示
-                if(callBack.isToast())
-                    ToastUtils.showToast(json.optString("msg"));
-                callBack.onError(null);
+                if(null != callBack) {
+                    if (callBack.isToast())
+                        ToastUtils.showToast(json.optString("msg"));
+                    callBack.onError(null);
+                }
             }
 
         } catch (IOException e) {
@@ -68,7 +75,8 @@ public class ReqSubscriber<T> extends BaseSubscriber<ResponseBody> {
         catch (JSONException e) {
             e.printStackTrace();
         }
-        callBack.onCompleted();
+        if(null != callBack)
+            callBack.onCompleted();
     }
 
     @Override

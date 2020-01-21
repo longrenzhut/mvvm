@@ -9,6 +9,8 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 
 import androidx.annotation.Nullable;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.zhongcai.base.R;
@@ -236,9 +238,8 @@ abstract public class AbsActivity extends RxActivity {
     public  <T extends BaseViewModel> T LViewModelProviders(Class<T> tClass){
         return ViewModelProviders.of(this).get(tClass);
     }
-
-    public void observe(){
-
+    protected <V> void observe(LiveData<V> liveData, Observer<V> v){
+        liveData.observe(this,v);
     }
 
     abstract public void initView(Bundle savedInstanceState);

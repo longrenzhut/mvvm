@@ -31,7 +31,6 @@ greendao {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-
     compile project(':thirdlibs:wechatsdk')
     compile project(':thirdlibs:imagepicker')
     compile project(':thirdlibs:app_base')

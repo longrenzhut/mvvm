@@ -3,21 +3,15 @@ package com.zhongcai.base.https;
 
 import android.net.ParseException;
 
-import androidx.lifecycle.ViewModel;
-
 import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
 import com.zhongcai.base.base.viewmodel.BaseViewModel;
-import com.zhongcai.base.rxbus.RxBus;
-import com.zhongcai.base.theme.layout.LoadingDialog;
-import com.zhongcai.base.theme.layout.UILoadLayout;
 import com.zhongcai.base.utils.ToastUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.ref.WeakReference;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
@@ -146,8 +140,6 @@ import java.lang.reflect.Type;
 
     @Override
     public void OnFailed(int code,String msg) {
-        if(null != mViewModel)
-            mViewModel.hideUILoading();
     }
 
     @Override
@@ -159,7 +151,7 @@ import java.lang.reflect.Type;
     @Override
     public void onCompleted() {
         if(null != mViewModel)
-            mViewModel.dismissLoading();
+            mViewModel.onCompleted();
     }
 
     @Override

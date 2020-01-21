@@ -1,4 +1,4 @@
-package com.zhut.mvvm
+package com.zhut.mvvm.activity
 
 
 
@@ -15,6 +15,7 @@ import com.zhongcai.common.helper.permission.OnPermission
 import com.zhongcai.common.helper.permission.Permission
 import com.zhongcai.common.helper.permission.PermissionHelper
 import com.zhongcai.common.widget.dialog.PromptDialog
+import com.zhut.mvvm.R
 
 
 /**
