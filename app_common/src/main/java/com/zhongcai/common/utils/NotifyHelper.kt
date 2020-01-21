@@ -9,6 +9,7 @@ import android.os.Build
 import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
 import com.zhongcai.base.utils.BaseUtils
+import com.zhongcai.common.utils.AppUtils
 import java.io.File
 
 
@@ -23,12 +24,12 @@ class NotifyHelper(private val ctx: Context){
 
     private val builder by lazy(LazyThreadSafetyMode.NONE){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel("com.zhongcai.hydhome", "财服通", NotificationManager.IMPORTANCE_LOW)
+            val channel = NotificationChannel(AppUtils.getPackageName(ctx), AppUtils.getAppName(ctx), NotificationManager.IMPORTANCE_LOW)
 
             manager.createNotificationChannel(channel)
         }
 
-       NotificationCompat.Builder(ctx,"com.zhongcai.hydhome")
+       NotificationCompat.Builder(ctx,AppUtils.getPackageName(ctx))
     }
 
     private val manager by lazy(LazyThreadSafetyMode.NONE){
@@ -86,7 +87,7 @@ class NotifyHelper(private val ctx: Context){
     /**
      * 设置该通知优先级
      */
-    fun setPriority(priority: Int = Notification.PRIORITY_MAX): NotifyHelper
+    fun setPriority(priority: Int = Notification.VISIBILITY_PUBLIC): NotifyHelper
             = this.apply {
         builder.priority = priority
     }
