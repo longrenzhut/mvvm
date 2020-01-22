@@ -1,7 +1,7 @@
 package com.zhut.mvvm.activity
 
 import android.os.Bundle
-import com.zhongcai.base.base.activity.BaseAcivity
+import com.zhongcai.base.base.activity.BaseActivity
 import com.zhongcai.base.rxbinding.RxClick
 import com.zhongcai.base.utils.ToastUtils
 import com.zhongcai.common.helper.db.helper.DbHelper
@@ -10,7 +10,7 @@ import com.zhut.mvvm.R
 import com.zhut.mvvm.viewmodel.MainViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainAct : BaseAcivity<MainViewModel>() {
+class MainAct : BaseActivity<MainViewModel>() {
 
     override fun getViewModel(): MainViewModel = LViewModelProviders(MainViewModel::class.java)
 
@@ -28,6 +28,7 @@ class MainAct : BaseAcivity<MainViewModel>() {
 
     override fun setObserve() {
         observe<Int>(mViewModel.mConfig){
+            ToastUtils.showToast( "werer$it")
         }
     }
 

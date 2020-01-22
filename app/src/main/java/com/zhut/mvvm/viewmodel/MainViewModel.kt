@@ -9,7 +9,7 @@ import org.json.JSONObject
 class MainViewModel : BaseViewModel() {
 
     val mConfig by lazy {
-        MutableLiveData<Int>()
+        MutableLiveData<Int?>()
     }
 
 
@@ -18,7 +18,7 @@ class MainViewModel : BaseViewModel() {
         postP("app/access/getConfig", Params(),object : ReqCallBack<JSONObject>(){
             override fun OnSuccess(json: JSONObject?) {
                 val config = json?.optInt("switch")?:0
-                mConfig.value = config
+                mConfig.value = null
             }
         })
 

@@ -1,16 +1,13 @@
 package com.zhongcai.base.base.activity;
 
 
-import android.widget.Toast;
-
 import androidx.lifecycle.Observer;
 
 import com.zhongcai.base.base.viewmodel.BaseActionEvent;
 import com.zhongcai.base.base.viewmodel.BaseViewModel;
 import com.zhongcai.base.utils.Logger;
-import com.zhongcai.base.utils.ToastUtils;
 
-abstract public class BaseAcivity<T extends BaseViewModel> extends AbsActivity {
+abstract public class BaseActivity<T extends BaseViewModel> extends AbsActivity {
 
 
     protected T mViewModel;
