@@ -38,7 +38,17 @@
     <color name="cl_50AAE8">#50AAE8</color>
     <color name="cl_2D82BF">#2D82BF</color>
     <color name="cl_D6E8F4">#D6E8F4</color>
+    <color name="cl_DAF5F1">#DAF5F1</color>
 
 
+    <color name="cl_F44040">#F44040</color>
+    <color name="cl_aaF44040">#aaF44040</color>
 
+
+    <color name="cl_01C6AC">#01C6AC</color>
+    <color name="cl_aa01C6AC">#aa01C6AC</color>
+    <color name="cl_aa172A41">#aa172A41</color>
+    <color name="cl_161722">#161722</color>
+    <color name="cl_515968">#515968</color>
+    <color name="cl_E4E6EA">#E4E6EA</color>
 </resources>

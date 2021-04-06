@@ -29,9 +29,9 @@
             <ImageView
                 android:id="@+id/m_iv_anim"
                 android:layout_centerInParent="true"
-                android:layout_width="@dimen/x30"
+                android:layout_width="@dimen/x26"
                 android:src="@drawable/anim_loading"
-                android:layout_height="@dimen/x30" />
+                android:layout_height="@dimen/x26" />
 
         </RelativeLayout>
 
@@ -46,14 +46,15 @@
             android:visibility="gone">
 
             <ImageView
-                android:layout_width="@dimen/x120"
-                android:layout_height="@dimen/x90"
+                android:layout_width="@dimen/x80"
+                android:layout_height="@dimen/x86"
                 android:src="@drawable/no_connect"/>
 
             <TextView
+                android:id="@+id/vTvPrompt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="网络不给力，请检查您的网络设置"
+                android:text="网络已断开，请重试"
                 android:textSize="@dimen/sp_14"
                 android:textColor="#B9BEC3"
                 android:layout_marginTop="@dimen/y10"/>
@@ -66,7 +67,7 @@
                 android:layout_marginTop="@dimen/y30"
                 android:textColor="@color/colorTheme"
                 android:textSize="@dimen/sp_16"
-                android:background="@drawable/selector_ui_load"
+                android:background="@drawable/selector_prompt_right"
                 android:gravity="center"
                 android:text="刷新试试"/>
 

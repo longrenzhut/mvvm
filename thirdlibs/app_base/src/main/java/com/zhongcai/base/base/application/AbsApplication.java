@@ -22,6 +22,7 @@ public abstract class AbsApplication extends Application {
         }
     }
 
+
     @Override
     public void onCreate() {
         super.onCreate();

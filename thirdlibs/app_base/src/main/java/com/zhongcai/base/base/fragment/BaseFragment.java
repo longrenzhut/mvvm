@@ -49,6 +49,8 @@ abstract public class BaseFragment<T extends BaseViewModel> extends AbsFragment 
                 }
             }
         });
+
+        setObserve();
     }
 
     abstract public  T getViewModel();
@@ -57,6 +59,7 @@ abstract public class BaseFragment<T extends BaseViewModel> extends AbsFragment 
     protected void onCompleted(){
 
     }
+    abstract public void setObserve();
 
     protected void onError(){
 

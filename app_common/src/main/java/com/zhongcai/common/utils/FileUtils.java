@@ -1,122 +1,94 @@
 package com.zhongcai.common.utils;
 
+
+import android.annotation.SuppressLint;
+import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
+import android.os.Environment;
+import android.provider.DocumentsContract;
+import android.provider.MediaStore;
+import android.text.TextUtils;
+import android.util.Log;
+
+import androidx.annotation.NonNull;
+import androidx.documentfile.provider.DocumentFile;
 
 import com.zhongcai.base.Config;
-import com.zhongcai.base.utils.StringUtils;
-import com.zhongcai.common.helper.cache.CacheHelper;
 
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.net.URISyntaxException;
-
-
-
-/**
- * Created by Jwen on 2018/4/16.
- */
+import java.nio.channels.FileChannel;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 public class FileUtils {
 
-    public static final long MIN_STORAGE=52428800;//50*1024*1024最低50m
-
-
-
     /**
-     * 获取保存文件路径
-     * @param saveSize  预留空间
-     * @return 文件路径
+     * 删除指定目录下文件及目录
+     *
+     * @param deleteThisPath
+     * @return
      */
-    public static String getSavePath(long saveSize) {
-        String savePath = null;
-        if (StorageUtil.getExternaltStorageAvailableSpace() > saveSize) {//扩展存储设备>预留空间
-            savePath = StorageUtil.getExternalStorageDirectory();
-            File saveFile = new File(savePath);
-            if (!saveFile.exists()) {
-                saveFile.mkdirs();
-            } else if (!saveFile.isDirectory()) {
-                saveFile.delete();
-                saveFile.mkdirs();
-            }
-        } else if (StorageUtil.getSdcard2StorageAvailableSpace() > saveSize) {//sdcard2外部存储空间>预留空间
-            savePath = StorageUtil.getSdcard2StorageDirectory();
-            File saveFile = new File(savePath);
-            if (!saveFile.exists()) {
-                saveFile.mkdirs();
-            } else if (!saveFile.isDirectory()) {
-                saveFile.delete();
-                saveFile.mkdirs();
-            }
-        } else if (StorageUtil.getEmmcStorageAvailableSpace() > saveSize) {//可用的 EMMC 内部存储空间>预留空间
-            savePath = StorageUtil.getEmmcStorageDirectory();
-            File saveFile = new File(savePath);
-            if (!saveFile.exists()) {
-                saveFile.mkdirs();
-            } else if (!saveFile.isDirectory()) {
-                saveFile.delete();
-                saveFile.mkdirs();
-            }
-        } else if (StorageUtil.getOtherExternaltStorageAvailableSpace()>saveSize) {//其他外部存储可用空间>预留空间
-            savePath = StorageUtil.getOtherExternalStorageDirectory();
-            File saveFile = new File(savePath);
-            if (!saveFile.exists()) {
-                saveFile.mkdirs();
-            } else if (!saveFile.isDirectory()) {
-                saveFile.delete();
-                saveFile.mkdirs();
-            }
-        }else if (StorageUtil.getInternalStorageAvailableSpace() > saveSize) {//内部存储目录>预留空间
-            savePath = StorageUtil.getInternalStorageDirectory() + File.separator;
-        }
-        return savePath;
-    }
-
-
-    /**
-     * 创建文件夹
-     * @param path
-     */
-    public static void makeDir(String path){
-        File file = new File(path);
-        if(!file.exists()){
-            file.mkdirs();
-        }
-        file = null;
-    }
-
-    /**
-     * 创建readme
-     * @param uri
-     */
-    public static void createReadme(String uri){
-        File textFile = new File(uri + "/readme.txt");
-        if(!textFile.exists()){
+    public static void deleteFolderFile(String filePath, boolean deleteThisPath) {
+        if (!TextUtils.isEmpty(filePath)) {
             try {
-                textFile.createNewFile();
-                print(uri);
-            } catch (IOException e) {
+                File file = new File(filePath);
+                if (file.isDirectory()) {// 处理目录
+                    File files[] = file.listFiles();
+                    for (int i = 0; i < files.length; i++) {
+                        deleteFolderFile(files[i].getAbsolutePath(), true);
+                    }
+                }
+                if (deleteThisPath) {
+                    if (!file.isDirectory()) {// 如果是文件，删除
+                        file.delete();
+                    } else {// 目录
+                    }
+                }
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
     }
 
     /**
-     * 打印说明信息
-     * @param path
+     * 获取文件夹大小
+     *
+     * @param file File实例
+     * @return long
      */
-    private static void print(String path) {
+    public static long getFolderSize(File file) {
+        long size = 0;
+        try {
+            File[] fileList = file.listFiles();
+            for (int i = 0; i < fileList.length; i++) {
+                if (fileList[i].isDirectory()) size = size + getFolderSize(fileList[i]);
+                else size = size + fileList[i].length();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return size;
+    }
+
+
+
+    public static void saveToFile(String content) {
+        if(TextUtils.isEmpty(content))
+            return;
         FileWriter fw = null;
         BufferedWriter bw = null;
         try {
-            fw = new FileWriter(path + "/readme.txt", true);
+            fw = new FileWriter(Config.path + System.currentTimeMillis() + ".txt", true);
             bw = new BufferedWriter(fw); // 将缓冲对文件的输出
-            bw.write("this is zcfinance file" + "\n"); // 写入文件
-            bw.write("welcome read and not delete" + "\n"); // 写入文件
-            bw.newLine();
+            bw.write(content); // 写入文件
             bw.flush(); // 刷新该流的缓冲
             bw.close();
             fw.close();
@@ -130,78 +102,330 @@ public class FileUtils {
         }
     }
 
-    public static String getPath(Context context, Uri uri) throws URISyntaxException {
-        if ("content".equalsIgnoreCase(uri.getScheme())) {
-            String[] projection = { "_data" };
-            Cursor cursor = null;
-            try {
-                cursor = context.getContentResolver().query(uri, projection, null, null, null);
-                int column_index = cursor.getColumnIndexOrThrow("_data");
-                if (cursor.moveToFirst()) {
-                    return cursor.getString(column_index);
-                }
-            } catch (Exception e) {
+
+    public static void createFileUri(Context context){
+
+        String baseUri= Config.BASE_PATH;
+        makeDir(baseUri);
+        makeDir(baseUri + Config.PATH_VIDEO);
+        makeDir(baseUri + Config.PATH_PIC);
+        makeDir(baseUri + Config.PATH_DOWNLOAD);
+    }
+
+    /**
+     * 创建文件夹
+     * @param path
+     */
+    public static void makeDir(String path){
+        File file = new File(path);
+        if(!file.exists()){
+            file.mkdirs();
+        }
+    }
+
+
+
+    /**
+     * TAG for log messages.
+     */
+    private static final String TAG = "FileUtils";
+
+
+    /**
+     * @param uri The Uri to check.
+     * @return Whether the Uri authority is ExternalStorageProvider.
+     * @author paulburke
+     */
+    public static boolean isExternalStorageDocument(Uri uri) {
+        return "com.android.externalstorage.documents".equals(uri.getAuthority());
+    }
+
+    /**
+     * @param uri The Uri to check.
+     * @return Whether the Uri authority is DownloadsProvider.
+     * @author paulburke
+     */
+    public static boolean isDownloadsDocument(Uri uri) {
+        return "com.android.providers.downloads.documents".equals(uri.getAuthority());
+    }
+
+    /**
+     * @param uri The Uri to check.
+     * @return Whether the Uri authority is MediaProvider.
+     * @author paulburke
+     */
+    public static boolean isMediaDocument(Uri uri) {
+        return "com.android.providers.media.documents".equals(uri.getAuthority());
+    }
+
+    /**
+     * @param uri The Uri to check.
+     * @return Whether the Uri authority is Google Photos.
+     */
+    public static boolean isGooglePhotosUri(Uri uri) {
+        return "com.google.android.apps.photos.content".equals(uri.getAuthority());
+    }
+
+    /**
+     * Get the value of the data column for this Uri. This is useful for
+     * MediaStore Uris, and other file-based ContentProviders.
+     *
+     * @param context       The context.
+     * @param uri           The Uri to query.
+     * @param selection     (Optional) Filter used in the query.
+     * @param selectionArgs (Optional) Selection arguments used in the query.
+     * @return The value of the _data column, which is typically a file path.
+     * @author paulburke
+     */
+    public static String getDataColumn(Context context, Uri uri, String selection,
+                                       String[] selectionArgs) {
+
+        Cursor cursor = null;
+        final String column = "_data";
+        final String[] projection = {
+                column
+        };
+
+        try {
+            cursor = context.getContentResolver().query(uri, projection, selection, selectionArgs,
+                    null);
+            if (cursor != null && cursor.moveToFirst()) {
+                final int column_index = cursor.getColumnIndexOrThrow(column);
+                return cursor.getString(column_index);
             }
-        } else if ("file".equalsIgnoreCase(uri.getScheme())) {
-            return uri.getPath();
+        } catch (IllegalArgumentException ex) {
+            Log.i(TAG, String.format(Locale.getDefault(), "getDataColumn: _data - [%s]", ex.getMessage()));
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
         }
         return null;
     }
 
 
 
+    public static String getFileRealNameFromUri(Context context, Uri fileUri) {
+        if (context == null || fileUri == null) return null;
+        DocumentFile documentFile = DocumentFile.fromSingleUri(context, fileUri);
+        if (documentFile == null) return null;
+        return documentFile.getName();
+    }
+
     /**
-     * 将字节转换为数字
-     * @param sizeStr
+     * Get a file path from a Uri. This will get the the path for Storage Access
+     * Framework Documents, as well as the _data field for the MediaStore and
+     * other file-based ContentProviders.<br>
+     * <br>
+     * Callers should check whether the path is local before assuming it
+     * represents a local file.
+     *
+     * @param context The context.
+     * @param uri     The Uri to query.
+     * @author paulburke
+     */
+
+    @SuppressLint("NewApi")
+    public static String getPath(final Context context, final Uri uri) {
+        final boolean isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
+
+        // DocumentProvider
+        if (isKitKat && DocumentsContract.isDocumentUri(context, uri)) {
+            if (isExternalStorageDocument(uri)) {
+                final String docId = DocumentsContract.getDocumentId(uri);
+                final String[] split = docId.split(":");
+                final String type = split[0];
+
+                if ("primary".equalsIgnoreCase(type)) {
+                    return Environment.getExternalStorageDirectory() + "/" + split[1];
+                }
+
+                // TODO handle non-primary volumes
+            }
+            // DownloadsProvider
+            else if (isDownloadsDocument(uri)) {
+
+                final String docId = DocumentsContract.getDocumentId(uri);
+                final String[] split = docId.split(":");
+                final String type = split[0];
+
+
+                if("raw".equals(type)) {
+                    if(split.length == 2) {
+                        String path = split[1];
+                        return path;
+                    }
+                }
+                else if (!TextUtils.isEmpty(docId)) {
+                    try {
+                        final Uri contentUri = ContentUris.withAppendedId(
+                                Uri.parse("content://downloads/public_downloads"), Long.valueOf(docId));
+                        return getDataColumn(context, contentUri, null, null);
+                    } catch (NumberFormatException e) {
+                        Log.i(TAG, e.getMessage());
+                        return null;
+                    }
+                }
+            }
+            // MediaProvider
+            else if (isMediaDocument(uri)) {
+                final String docId = DocumentsContract.getDocumentId(uri);
+                final String[] split = docId.split(":");
+                final String type = split[0];
+
+                Uri contentUri = null;
+                if ("image".equals(type)) {
+                    contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+                } else if ("video".equals(type)) {
+                    contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
+                } else if ("audio".equals(type)) {
+                    contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+                }
+
+                final String selection = "_id=?";
+                final String[] selectionArgs = new String[]{
+                        split[1]
+                };
+
+                return getDataColumn(context, contentUri, selection, selectionArgs);
+            }
+        }
+        // MediaStore (and general)
+        else if ("content".equalsIgnoreCase(uri.getScheme())) {
+
+            // Return the remote address
+            if (isGooglePhotosUri(uri)) {
+                return uri.getLastPathSegment();
+            }
+
+            return getDataColumn(context, uri, null, null);
+        }
+        // File
+        else if ("file".equalsIgnoreCase(uri.getScheme())) {
+            return uri.getPath();
+        }
+
+        return null;
+    }
+
+    /**
+     * Copies one file into the other with the given paths.
+     * In the event that the paths are the same, trying to copy one file to the other
+     * will cause both files to become null.
+     * Simply skipping this step if the paths are identical.
+     */
+    public static boolean copyFile(FileInputStream fileInputStream, String outFilePath) throws IOException {
+        if (fileInputStream == null) {
+            return false;
+        }
+        FileChannel inputChannel = null;
+        FileChannel outputChannel = null;
+        try {
+            inputChannel = fileInputStream.getChannel();
+            outputChannel = new FileOutputStream(new File(outFilePath)).getChannel();
+            inputChannel.transferTo(0, inputChannel.size(), outputChannel);
+            inputChannel.close();
+            return true;
+        } catch (Exception e) {
+            return false;
+        } finally {
+            if (fileInputStream != null) fileInputStream.close();
+            if (inputChannel != null) inputChannel.close();
+            if (outputChannel != null) outputChannel.close();
+        }
+    }
+
+    /**
+     * Copies one file into the other with the given paths.
+     * In the event that the paths are the same, trying to copy one file to the other
+     * will cause both files to become null.
+     * Simply skipping this step if the paths are identical.
+     */
+    public static void copyFile(@NonNull String pathFrom, @NonNull String pathTo) throws IOException {
+        if (pathFrom.equalsIgnoreCase(pathTo)) {
+            return;
+        }
+
+        FileChannel outputChannel = null;
+        FileChannel inputChannel = null;
+        try {
+            inputChannel = new FileInputStream(new File(pathFrom)).getChannel();
+            outputChannel = new FileOutputStream(new File(pathTo)).getChannel();
+            inputChannel.transferTo(0, inputChannel.size(), outputChannel);
+            inputChannel.close();
+        } finally {
+            if (inputChannel != null) inputChannel.close();
+            if (outputChannel != null) outputChannel.close();
+        }
+    }
+
+    /**
+     * 复制文件
+     *
+     * @param source 输入文件
+     * @param target 输出文件
+     */
+    public static void copy(File source, File target) {
+        FileInputStream fileInputStream = null;
+        FileOutputStream fileOutputStream = null;
+        try {
+            fileInputStream = new FileInputStream(source);
+            fileOutputStream = new FileOutputStream(target);
+            byte[] buffer = new byte[1024];
+            while (fileInputStream.read(buffer) > 0) {
+                fileOutputStream.write(buffer);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (fileInputStream != null) {
+                    fileInputStream.close();
+                }
+                if (fileOutputStream != null) {
+                    fileOutputStream.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+
+    private static SimpleDateFormat sf = new SimpleDateFormat("yyyyMMdd_HHmmssSS");
+
+    /**
+     * 根据时间戳创建文件名
+     *
+     * @param prefix 前缀名
      * @return
      */
-    public static String getPrintSize(String sizeStr) {
-        long size = Long.valueOf(sizeStr);
+    public static String getCreateFileName(String prefix) {
+        long millis = System.currentTimeMillis();
+        return prefix + sf.format(millis);
+    }
 
-        if (size < 1024) {
-            return String.valueOf(size) + "B";
-        } else {
-            size = size / 1024;
-        }
-        if (size < 1024) {
-            return String.valueOf(size) + "KB";
-        } else {
-            size = size / 1024;
-        }
-        if (size < 1024) {
-            size = size * 100;
-            return String.valueOf((size / 100)) + "."
-                    + String.valueOf((size % 100)) + "MB";
-        } else {
-            size = size * 100 / 1024;
-            return String.valueOf((size / 100)) + "."
-                    + String.valueOf((size % 100)) + "GB";
-        }
+    /**
+     * 根据时间戳创建文件名
+     *
+     * @return
+     */
+    public static String getCreateFileName() {
+        long millis = System.currentTimeMillis();
+        return sf.format(millis);
     }
 
 
-    public static void createFileUri(Context context){
-        String path =  CacheHelper.getVal().getString(Config.PATH_BASE,"");
-        if(StringUtils.isEmpty(path) || !path.contains(Config.FOLDER_NAME)){
-            String baseUri= FileUtils.getCachePath();
-            CacheHelper.getVal().put(Config.PATH_BASE,baseUri);
-        }
+    /**
+     * 重命名相册拍照
+     *
+     * @param fileName
+     * @return
+     */
+    public static String rename(String fileName) {
+        String temp = fileName.substring(0, fileName.lastIndexOf("."));
+        String suffix = fileName.substring(fileName.lastIndexOf("."));
+        return new StringBuffer().append(temp).append("_").append(getCreateFileName()).append(suffix).toString();
     }
-
-    //缓存路径
-    public static String getCachePath(){
-        String baseUri = getSavePath(MIN_STORAGE);
-        if(StringUtils.isEmpty(baseUri)){
-            return null;
-        }
-        baseUri= baseUri + Config.FOLDER_NAME;
-
-        makeDir(baseUri);
-        makeDir(baseUri + Config.PATH_VIDEO);
-        makeDir(baseUri + Config.PATH_PIC);
-        makeDir(baseUri + Config.PATH_DOWNLOAD);
-        createReadme(baseUri);
-        return baseUri;
-    }
-
 }

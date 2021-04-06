@@ -21,15 +21,33 @@ public class Params {
     private boolean mHasKey = true;//是否有key
     private String mEncrypt = "AES";//加密方式
     private JSONObject json;
+    private JSONArray jsonArr;
 
     public Params(){
         json = new JSONObject();
+    }
+
+    public Params(JSONObject json){
+        this.json = json;
+    }
+
+    public Params(JSONArray jsonArr){
+        this.jsonArr = jsonArr;
     }
 
 
 
 
     public Params put(String key, String value){
+        try {
+            json.put(key,value);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return this;
+    }
+
+    public Params put(String key, RequestBody value){
         try {
             json.put(key,value);
         } catch (JSONException e) {
@@ -90,7 +108,15 @@ public class Params {
     }
 
     public String getJson() {
+        if(jsonArr != null)
+            return jsonArr.toString();
         return json.toString();
+    }
+
+
+
+    public JSONObject getJSONObject() {
+        return json;
     }
 
 
@@ -104,20 +130,21 @@ public class Params {
         }
 
         MediaType mediaType;
-        if (Config.DEVELOP || Config.TEST){
-            mediaType = MediaType.parse("application/json;charset=utf-8");
-        } else {//加密
-            mediaType = MediaType.parse("text/plain;charset=utf-8");
-            try {
-                if(mEncrypt == "RSA"){
-                    content = RSAEncrypt.encrypt(content,RSAEncrypt.getPublicKey(RSAEncrypt.KEY_PUBLIC));
-                }else {
-                    content = AESHexEncrypt.encrypt(content,AESHexEncrypt.KEY);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
+        mediaType = MediaType.parse("application/json;charset=utf-8");
+//        if (Config.DEVELOP || Config.TEST || Config.PRE){
+//            mediaType = MediaType.parse("application/json;charset=utf-8");
+//        } else {//加密
+//            mediaType = MediaType.parse("text/plain;charset=utf-8");
+//            try {
+//                if(mEncrypt == "RSA"){
+//                    content = RSAEncrypt.encrypt(content,RSAEncrypt.getPublicKey(RSAEncrypt.KEY_PUBLIC));
+//                }else {
+//                    content = AESHexEncrypt.encrypt(content,AESHexEncrypt.KEY);
+//                }
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//        }
         return RequestBody.create(mediaType, content);
     }
 

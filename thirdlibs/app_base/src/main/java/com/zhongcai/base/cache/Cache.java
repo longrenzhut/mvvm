@@ -2,10 +2,12 @@ package com.zhongcai.base.cache;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.text.TextUtils;
 
 import com.google.gson.Gson;
 import com.zhongcai.base.base.application.BaseApplication;
 
+import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,6 +19,7 @@ import java.util.Map;
 
 public class Cache {
 
+    public static final String DB_DATE = "db_date";
 
     private static Cache instance;
 
@@ -42,6 +45,19 @@ public class Cache {
             }
         }
         return caninstance;
+    }
+
+    private static Cache orgininstance;
+
+    public static Cache getOrgin() {
+        if (orgininstance == null) {
+            synchronized (Cache.class) {
+                if (orgininstance == null) {
+                    orgininstance = new Cache("orgin");
+                }
+            }
+        }
+        return orgininstance;
     }
 
     public static final String COMMON = "common";
@@ -110,15 +126,22 @@ public class Cache {
         cache.edit().remove(key).apply();
     }
 
-    public  <T> void putEntity(String key, T entity) {
+    public  <T> void putModel(String key, T entity) {
         put(key, new Gson().toJson(entity));
     }
 
-    public  <T> T getEntity(String key, Class<T> tClass){
+    public  <T> T getModel(String key, Class<T> tClass){
         String value = getString(key,"");
         if(value == "")
             return null;
         return new Gson().fromJson(value, tClass);
+    }
+
+    public  <T> T getList(String key, Type type){
+        String value = getString(key,"");
+        if(TextUtils.isEmpty(value))
+            return null;
+        return new Gson().fromJson(value, type);
     }
 
 

@@ -70,7 +70,8 @@ abstract class BasePopupWindow(val mActivity: Activity) : PopupWindow(){
         super.showAtLocation(parent, Gravity.FILL, 0, 0)
     }
 
-    override fun showAsDropDown(parent: View,  x: Int, y: Int) {
+
+    fun showAsDropDownBg(parent: View,  x: Int, y: Int) {
         postDelayed()
         super.showAsDropDown(parent, x, y)
     }

@@ -2,10 +2,13 @@ package com.zhongcai.base.https;
 
 
 import android.net.ParseException;
+import android.text.TextUtils;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
 import com.zhongcai.base.base.viewmodel.BaseViewModel;
+import com.zhongcai.base.rxbus.RxBus;
+import com.zhongcai.base.utils.BaseUtils;
 import com.zhongcai.base.utils.ToastUtils;
 
 import org.json.JSONArray;
@@ -19,7 +22,7 @@ import java.lang.reflect.Type;
  * Created by zhutao on 2018/3/7.
  */
 
- abstract public class ReqCallBack<T> implements IReqCallBack<T> {
+abstract public class ReqCallBack<T> implements IReqCallBack<T> {
 
     private BaseViewModel mViewModel;
 
@@ -58,6 +61,13 @@ import java.lang.reflect.Type;
         return this;
     }
 
+    private boolean isHideUILoading = true;
+
+    public ReqCallBack<T> setHideUILoading(){
+        isHideUILoading = false;
+        return this;
+    }
+
     private Type modelType;
 
     public ReqCallBack setModelType(Type modelType) {
@@ -70,8 +80,13 @@ import java.lang.reflect.Type;
         String value = "";
         if(ispaging) {
             try {
-                JSONObject json = new JSONObject(str);
-                value = json.optString(key);
+                if(TextUtils.isEmpty(str) || "null".equals(str)){
+                    value = null;
+                }
+                else {
+                    JSONObject json = new JSONObject(str);
+                    value = json.optString(key);
+                }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -115,7 +130,7 @@ import java.lang.reflect.Type;
         }
         else {
             try {
-                T result = new Gson().fromJson(value, modelType);
+                T result = BaseUtils.fromJson(value, modelType);
                 OnSuccess(result);
             }catch (JsonParseException e){
                 e.printStackTrace();
@@ -125,27 +140,33 @@ import java.lang.reflect.Type;
             }
         }
 
-        if(null != mViewModel)
+        if(isHideUILoading &&null != mViewModel)
             mViewModel.hideUILoading();
     }
 
     @Override
     public void OnFailed(int code) {
-//        if(code == 12100 || code == 12300 || code == 12400){
-//            RxBus.instance().post(21,1);
-//        }
-        if(null != mViewModel)
+        if(code == 401 || code == 4000){
+            RxBus.instance().post(70,1);
+        }
+
+        if(null != mViewModel) {
+            mViewModel.OnFailed(code);
             mViewModel.hideUILoading();
+        }
     }
 
     @Override
     public void OnFailed(int code,String msg) {
+
     }
 
     @Override
     public void onError(Throwable e) {
-        if(null != mViewModel)
+        if(null != mViewModel){
             mViewModel.errorUILoading();
+            mViewModel.onError();
+        }
     }
 
     @Override

@@ -1,7 +1,6 @@
 include ':app','app_common'
 include ':thirdlibs:app_base'
 include ':thirdlibs:wechatsdk'
-include ':thirdlibs:imagepicker'
 include ':thirdlibs:tencentsdk'
 include ':thirdlibs:vlayout'
-rootProject.name='androidBase'
+rootProject.name='mvvm'

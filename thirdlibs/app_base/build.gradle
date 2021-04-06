@@ -40,7 +40,7 @@ dependencies {
     //    compile(rootProject.ext.dependencies["vlayout"]) {
     //        transitive = true
     //    }
-    implementation rootProject.ext.dependencies["glide"]
+    compile rootProject.ext.dependencies["glide"]
     //集成kotlin sdk
     implementation rootProject.ext.dependencies["kotlin-stdlib"]
     compile rootProject.ext.dependencies["anko-common"]

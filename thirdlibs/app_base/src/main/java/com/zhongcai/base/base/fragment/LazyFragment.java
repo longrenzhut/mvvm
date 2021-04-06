@@ -3,6 +3,9 @@ package com.zhongcai.base.base.fragment;
 import android.os.Bundle;
 import android.view.View;
 
+import androidx.lifecycle.Observer;
+
+import com.zhongcai.base.base.viewmodel.BaseActionEvent;
 import com.zhongcai.base.base.viewmodel.BaseViewModel;
 
 /**
@@ -10,8 +13,18 @@ import com.zhongcai.base.base.viewmodel.BaseViewModel;
  * 懒加载 当使用viewpager 时候用到
  */
 
-abstract public class LazyFragment<V extends BaseViewModel> extends AbsFragment {
+abstract public class LazyFragment<T extends BaseViewModel> extends AbsFragment {
 
+
+    @Override
+    protected boolean isUseHeader() {
+        return false;
+    }
+
+    @Override
+    protected boolean isUseStatus() {
+        return false;
+    }
 
     //Fragment的View加载完毕的标记
     private boolean isPrepared = false;
@@ -61,14 +74,6 @@ abstract public class LazyFragment<V extends BaseViewModel> extends AbsFragment 
     public abstract void lazyLoad();
 
 
-    protected V mViewModel;
-
-    @Override
-    protected void setViewModel(){
-        mViewModel = getViewModel();
-    }
-
-    protected abstract V getViewModel();
 
 
 
@@ -76,5 +81,65 @@ abstract public class LazyFragment<V extends BaseViewModel> extends AbsFragment 
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
     }
+
+
+    protected T mViewModel;
+
+    @Override
+    public void setViewModel() {
+        mViewModel = getViewModel();
+        observe(mViewModel.getActionLiveData(), new Observer<BaseActionEvent>() {
+            @Override
+            public void onChanged(BaseActionEvent baseActionEvent) {
+                switch (baseActionEvent.getAction()){
+                    case BaseActionEvent.loading_success:
+                        if(null != mUiLayout)
+                            mUiLayout.loadok();
+                        break;
+                    case BaseActionEvent.loading_error:
+                        if(null != mUiLayout)
+                            mUiLayout.loadFailed();
+                        break;
+                    case BaseActionEvent.loading_onCompleted:
+                        dismiss();
+                        onCompleted();
+                        break;
+                }
+            }
+        });
+
+        observe(mViewModel.getCallBackLiveData(), new Observer<BaseActionEvent>() {
+            @Override
+            public void onChanged(BaseActionEvent baseActionEvent) {
+                switch (baseActionEvent.getAction()){
+                    case BaseActionEvent.failed:
+                        onFailed(baseActionEvent.getCode());
+                        break;
+                    case BaseActionEvent.error:
+                        onError();
+                        break;
+                }
+            }
+        });
+
+        setObserve();
+    }
+
+    abstract public  T getViewModel();
+
+
+    protected void onCompleted(){
+
+    }
+    abstract public void setObserve();
+
+    protected void onError(){
+
+    }
+
+    protected void onFailed(int code){
+
+    }
+
 
 }

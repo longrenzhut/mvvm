@@ -6,11 +6,14 @@ import androidx.lifecycle.ViewModel;
 import com.zhongcai.base.https.HttpProvider;
 import com.zhongcai.base.https.Params;
 import com.zhongcai.base.https.ReqCallBack;
+import com.zhongcai.base.https.UpFileParam;
 import com.zhongcai.base.https.zip.BaseBiFunction;
 import com.zhongcai.base.https.zip.BaseFunction3;
 import com.zhongcai.base.https.zip.BaseFunction4;
+import com.zhongcai.base.https.zip.BaseFunction5;
 import com.zhongcai.base.https.zip.ReqZip3Subscriber;
 import com.zhongcai.base.https.zip.ReqZip4Subscriber;
+import com.zhongcai.base.https.zip.ReqZip5Subscriber;
 import com.zhongcai.base.https.zip.ReqZipSubscriber;
 
 import io.reactivex.Observable;
@@ -48,10 +51,31 @@ public class BaseViewModel extends ViewModel implements IViewModelAction{
     }
 
 
+    protected <T> void postC(String url, Params params, ReqCallBack<T> callBack){
+
+        addDisposable(
+                HttpProvider.getHttp().postC(url,params,callBack.setViewModel(this))
+        );
+    }
+
     protected <T> void postJ(String url, Params params, ReqCallBack<T> callBack){
 
         addDisposable(
                 HttpProvider.getHttp().postJ(url,params,callBack.setViewModel(this))
+        );
+    }
+
+    protected <T> void postJBuy(String url, Params params, ReqCallBack<T> callBack){
+
+        addDisposable(
+                HttpProvider.getHttp().postJBuy(url,params,callBack.setViewModel(this))
+        );
+    }
+
+    protected <T> void upFile(String url, UpFileParam params, ReqCallBack<T> callBack){
+
+        addDisposable(
+                HttpProvider.getHttp().upFile(url,params,callBack.setViewModel(this))
         );
     }
 
@@ -177,9 +201,41 @@ public class BaseViewModel extends ViewModel implements IViewModelAction{
         addDisposable(disposable);
     }
 
+    /**
+     * 5个接口合并请求
+     */
+    protected <T,R,S,H,X> void zipPost(Observable<ResponseBody> t,
+                                     Observable<ResponseBody> r,
+                                     Observable<ResponseBody> s,
+                                     Observable<ResponseBody> h,
+                                     Observable<ResponseBody> x,
+                                     ReqCallBack<T> callBack1,
+                                     ReqCallBack<R> callBack2,
+                                     ReqCallBack<S> callBack3,
+                                     ReqCallBack<H> callBack4,
+                                     ReqCallBack<X> callBack5
+                                       ){
+
+
+        Disposable disposable = Observable.zip(t,r,s,h,x,new BaseFunction5())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribeWith(new ReqZip5Subscriber<>(callBack1.setViewModel(this),callBack2,callBack3,callBack4,callBack5));
+
+        addDisposable(disposable);
+    }
+
 
     protected Observable<ResponseBody> postJResponseBody(String url,Params params){
         return HttpProvider.getHttp().createJService().post(url,params.getBody());
+    }
+
+    protected Observable<ResponseBody> postJBuyResponseBody(String url,Params params){
+        return HttpProvider.getHttp().createJBuyService().post(url,params.getBody());
+    }
+
+    protected Observable<ResponseBody> postCResponseBody(String url,Params params){
+        return HttpProvider.getHttp().createCService().post(url,params.getBody());
     }
 
 

@@ -2,14 +2,21 @@ package com.zhongcai.base.https;
 
 
 import android.os.Build;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
 
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import com.trello.rxlifecycle3.android.ActivityEvent;
+import com.trello.rxlifecycle3.android.FragmentEvent;
 import com.zhongcai.base.Config;
 import com.zhongcai.base.base.activity.AbsActivity;
+import com.zhongcai.base.base.application.BaseApplication;
+import com.zhongcai.base.base.fragment.AbsFragment;
+import com.zhongcai.base.https.jsonfactory.JsonConverterFactory;
 
 import java.io.IOException;
 import java.security.cert.CertificateException;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.SSLSocketFactory;
@@ -18,11 +25,13 @@ import javax.net.ssl.X509TrustManager;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import okhttp3.ResponseBody;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -44,6 +53,26 @@ public class HttpProvider {
         if(Config.PRE)
             return Config.JAVA_URL_PRE;
         return Config.JAVA_URL;
+    }
+
+    public static String getBuyJavaUrl(){
+        if(Config.DEVELOP)
+            return Config.BUY_JAVA_URL_DEV;
+        if(Config.TEST)
+            return Config.BUY_JAVA_URL_TEST;
+        if(Config.PRE)
+            return Config.BUY_JAVA_URL_PRE;
+        return Config.BUY_JAVA_URL;
+    }
+
+    public static String getCUrl(){
+        if(Config.DEVELOP)
+            return Config.C_URL_DEV;
+        if(Config.TEST)
+            return Config.C_URL_TEST;
+        if(Config.PRE)
+            return Config.C_URL_PRE;
+        return Config.C_URL;
     }
 
 
@@ -79,15 +108,15 @@ public class HttpProvider {
             loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.NONE);
 
         builder.addInterceptor(loggingInterceptor)
-                .addInterceptor(new Interceptor(){
-                    @Override
-                    public Response intercept(Chain chain) throws IOException {
-                        Request request = chain.request();
-                        Request.Builder builder = request.newBuilder();
-
-
-                        Request newRequest = builder.build();
-                        Response response = chain.proceed(newRequest);
+//                .addInterceptor(new Interceptor(){
+//                    @Override
+//                    public Response intercept(Chain chain) throws IOException {
+//                        Request request = chain.request();
+//                        Request.Builder builder = request.newBuilder();
+//
+//
+//                        Request newRequest = builder.build();
+//                        Response response = chain.proceed(newRequest);
 
 //                        Response response = chain.proceed(request);
 //                        Request newRequest;
@@ -101,9 +130,9 @@ public class HttpProvider {
 //                            newRequest = builder.build();
 //                        }
 //                        response = chain.proceed(newRequest);
-
-                        return response;
-                    }})
+//
+//                        return response;
+//                    }})
                 .connectTimeout(CONNECT_TIMEOUT, TimeUnit.SECONDS)
                 .readTimeout(CONNECT_TIMEOUT,TimeUnit.SECONDS)
                 .writeTimeout(CONNECT_TIMEOUT, TimeUnit.SECONDS);
@@ -148,7 +177,9 @@ public class HttpProvider {
 
         builder = new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())
+//                .addConverterFactory(JsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create());// 添加 RxJava 适配器
+
     }
 
     /**
@@ -188,6 +219,14 @@ public class HttpProvider {
         return getHttp().buildRetrofit(getJavaUrl()).create(BaseService.class);
     }
 
+    public  BaseService createJBuyService(){
+        return getHttp().buildRetrofit(getBuyJavaUrl()).create(BaseService.class);
+    }
+
+    public  BaseService createCService(){
+        return getHttp().buildRetrofit(getCUrl()).create(BaseService.class);
+    }
+
     private final static int CONNECT_TIMEOUT_FILE = 60;
 
     //---------------下载图片 文件-------
@@ -196,24 +235,24 @@ public class HttpProvider {
         if(null == upload) {
             upload = new OkHttpClient.Builder();
 
-//            upload.connectTimeout(CONNECT_TIMEOUT_FILE, TimeUnit.SECONDS)
-//                    .readTimeout(CONNECT_TIMEOUT_FILE,TimeUnit.SECONDS)
-//                    .writeTimeout(CONNECT_TIMEOUT_FILE, TimeUnit.SECONDS);
+//            upload.retryOnConnectionFailure(true);
+            //打印请求的数据的logo
 //            HttpLoggingInterceptor loggingInterceptor = new  HttpLoggingInterceptor();
-//            //打印请求的数据的logo
 //            if (Config.DEVELOP || Config.TEST || Config.PRE)
 //                loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 //            else
 //                loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.NONE);
-            //错误重连
-//            upload.retryOnConnectionFailure(true);
+//            upload.addInterceptor(loggingInterceptor);
             upload.networkInterceptors().add(new Interceptor() {
                 @Override
                 public Response intercept(Chain chain) throws IOException {
                     Response originalResponse = chain.proceed(chain.request());
-
+//                    originalResponse.request().url()
                     return originalResponse
                             .newBuilder()
+//                            .removeHeader("User-Agent")
+//                            .addHeader("User-Agent", WebSettings.getDefaultUserAgent(BaseApplication.app))
+//                            .addHeader("Content-Type","Content-Type: application/json;charset=UTF-8")
                             .body(new FileResponseBody(originalResponse))
                             .build();
                 }
@@ -225,7 +264,12 @@ public class HttpProvider {
 
 
     public BaseFileService createDownloadService(){
-        return buildRetrofit(getLoadingUrl()).create(BaseFileService.class);
+        return create(getLoadingUrl()).create(BaseFileService.class);
+    }
+
+
+    public BaseFileService createDownloadService(String url){
+        return create(url).create(BaseFileService.class);
     }
 
 
@@ -264,6 +308,86 @@ public class HttpProvider {
 
     }
 
+
+
+    public  Disposable downFile(AbsActivity abs, String baseUrl, String url, DisposableObserver<ResponseBody> callback){
+
+        return createDownloadService(baseUrl).loadFile(url)
+                .compose(abs.<ResponseBody>bindUntilEvent(ActivityEvent.DESTROY))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribeWith(callback);
+
+    }
+
+
+    public  Disposable downFile(AbsActivity abs, String baseUrl, String url,Map<String, Object> map,DisposableObserver<ResponseBody> callback){
+
+        return createDownloadService(baseUrl).loadFile(url,map)
+                .compose(abs.<ResponseBody>bindUntilEvent(ActivityEvent.DESTROY))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribeWith(callback);
+
+    }
+
+    public static String getBasUrl(String url) {
+        String head = "";
+        int index = url.indexOf("://");
+        if (index != -1) {
+            head = url.substring(0, index + 3);
+            url = url.substring(index + 3);
+        }
+        index = url.indexOf("/");
+        if (index != -1) {
+            url = url.substring(0, index + 1);
+        }
+        return head + url;
+    }
+
+
+    public Disposable downFile(AbsActivity abs,String url,DownFileSubscriber callBack){
+
+        String baseUrl = getBasUrl(url);
+        String newUrl = url.replace(baseUrl,"");
+        return createDownloadService(baseUrl).loadFile(newUrl)
+                .compose(abs.<ResponseBody>bindUntilEvent(ActivityEvent.DESTROY))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribeWith(callBack);
+
+    }
+
+    public Disposable downFile(AbsFragment fra, String url, DownFileSubscriber callBack){
+
+        String baseUrl = getBasUrl(url);
+        String newUrl = url.replace(baseUrl,"");
+        return createDownloadService(baseUrl).loadFile(newUrl)
+                .compose(fra.<ResponseBody>bindUntilEvent(FragmentEvent.DESTROY))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribeWith(callBack);
+
+    }
+
+    public <T> Disposable upFile(String url, UpFileParam params, ReqCallBack<T> callBack){
+
+        return createUploadService().upFile(url, params.getMap())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribeWith(new ReqSubscriber<>(callBack));
+
+    }
+
+//    public <T> Disposable loadFile(String url, UpFileParam params, ReqCallBack<T> callBack){
+//
+//        return createDownloadService().loadFile(url, params.getMap())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribeOn(Schedulers.io())
+//                .subscribeWith(new ReqSubscriber<>(callBack));
+//
+//    }
+
     public <T> Disposable postP(String url, Params params, ReqCallBack<T> callBack){
         return  createPService().post(url,params.getBody())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -274,6 +398,22 @@ public class HttpProvider {
 
     public <T> Disposable postJ(String url, Params params, ReqCallBack<T> callBack){
         return  createJService().post(url,params.getBody())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribeWith(new ReqSubscriber<>(callBack));
+
+    }
+
+    public <T> Disposable postJBuy(String url, Params params, ReqCallBack<T> callBack){
+        return  createJBuyService().post(url,params.getBody())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribeWith(new ReqSubscriber<>(callBack));
+
+    }
+
+    public <T> Disposable postC(String url, Params params, ReqCallBack<T> callBack){
+        return  createCService().post(url,params.getBody())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribeWith(new ReqSubscriber<>(callBack));

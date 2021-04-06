@@ -14,6 +14,12 @@ public class Logger {
 
 	public static void d(String message){
 		if(Config.DEVELOP || Config.TEST || Config.PRE)
+			Log.i("com.zhut.info", "---------------: " + message );
+	}
+
+
+	public static void error(String message){
+		if(Config.DEVELOP || Config.TEST || Config.PRE)
 			Log.e("com.zhut.error", "---------------: " + message );
 	}
 

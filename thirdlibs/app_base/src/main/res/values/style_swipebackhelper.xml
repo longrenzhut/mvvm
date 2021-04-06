@@ -14,4 +14,5 @@
         <item name="android:taskToBackEnterAnimation">@anim/slide_in_left</item>
         <item name="android:taskToBackExitAnimation">@anim/slide_out_right</item>
     </style>
+
 </resources>

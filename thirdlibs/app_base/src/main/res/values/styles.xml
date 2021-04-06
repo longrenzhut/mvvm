@@ -43,7 +43,15 @@
 
 
 
-    <style name="AppTheme" parent="AppTheme.Base"></style>
+    <style name="AppTheme" parent="AppTheme.Base">
+
+    </style>
+
+
+    <style name="AppThemeNoAnim" parent="AppTheme.Base">
+        <item name="android:windowAnimationStyle">@null</item>
+
+    </style>
 
 
     <style name="transparentTheme" parent="AppTheme.Base">

@@ -1,5 +1,7 @@
 package com.zhongcai.base.utils;
 
+import android.content.Context;
+
 import com.zhongcai.base.base.activity.AbsActivity;
 
 import java.io.File;
@@ -18,6 +20,36 @@ public class CompUtils {
         Luban.with(act)
                 .load(url)
                 .ignoreBy(size)
+                .setFocusAlpha(false)
+//                .setTargetDir(getPath())
+        .filter(new CompressionPredicate(){
+
+            @Override
+            public boolean apply(String path) {
+                return !(StringUtils.isEmpty(path) || path.toLowerCase().endsWith(".gif"));
+            }
+        }).setCompressListener(new OnCompressListener(){
+            @Override
+            public void onStart() {
+            }
+
+            @Override
+            public void onSuccess(File file) {
+                lisenter.onSuccess(file);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+            }
+        }).launch();
+    }
+
+
+    public static void compress(Context ctx, final String url,
+                                final onCompressOneLisenter lisenter){
+        Luban.with(ctx)
+                .load(url)
+                .ignoreBy(100)
                 .setFocusAlpha(false)
 //                .setTargetDir(getPath())
         .filter(new CompressionPredicate(){

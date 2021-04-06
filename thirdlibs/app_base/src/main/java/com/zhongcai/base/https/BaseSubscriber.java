@@ -6,6 +6,7 @@ import android.net.ParseException;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSyntaxException;
 import com.zhongcai.base.Config;
+import com.zhongcai.base.utils.Logger;
 import com.zhongcai.base.utils.ToastUtils;
 
 import org.json.JSONException;
@@ -21,7 +22,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableObserver;
 
 /**
- * Created by Admininstanceoftrator on 2018/3/7.
+ * Created by zhutao on 2018/3/7.
  */
 
 abstract public class BaseSubscriber<T> extends DisposableObserver<T> {
@@ -35,13 +36,17 @@ abstract public class BaseSubscriber<T> extends DisposableObserver<T> {
     private String msg(Throwable t){
         if (t instanceof NetworkErrorException ||
                 t instanceof UnknownHostException ||
-                t instanceof ConnectException)
+                t instanceof ConnectException){
+            Logger.info(t.getMessage());
             return "网络异常";
+        }
 
         else if (t instanceof SocketTimeoutException ||
                 t instanceof InterruptedIOException ||
-                t instanceof TimeoutException)
+                t instanceof TimeoutException){
+            Logger.info(t.getMessage());
             return "网络请求超时";
+        }
 
         else if (t instanceof JsonSyntaxException) {
             return "请求不合法";

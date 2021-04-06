@@ -7,6 +7,7 @@ import com.zhongcai.base.base.fragment.AbsFragment;
 
 import io.reactivex.Flowable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.processors.FlowableProcessor;
 import io.reactivex.processors.PublishProcessor;
@@ -36,18 +37,35 @@ public class RxBus {
 
 
     public <T> void registerRxBus(AbsActivity context, int code, final OnRxBusListener<T> listener){
-        RxBus.instance().toFlowable(code)
-               .compose(context.<Message>bindUntilEvent(ActivityEvent.DESTROY))
+        Disposable subscribe = RxBus.instance().toFlowable(code)
+                .compose(context.<Message>bindUntilEvent(ActivityEvent.DESTROY))
+                .onBackpressureBuffer()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<Message>(){
+                .subscribe(new Consumer<Message>() {
 
                     @Override
                     public void accept(Message t) throws Exception {
-                        if(null != listener)
-                            listener.OnRxBus((T)t.getValue());
+                        if (null != listener)
+                            listener.OnRxBus((T) t.getValue());
                     }
                 });
+    }
+
+    public <T> Disposable registerRxBus(int code, final OnRxBusListener<T> listener){
+        Disposable disposable = RxBus.instance().toFlowable(code)
+                .onBackpressureBuffer()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<Message>() {
+
+                    @Override
+                    public void accept(Message t) throws Exception {
+                        if (null != listener)
+                            listener.OnRxBus((T) t.getValue());
+                    }
+                });
+        return  disposable;
     }
 
 
@@ -68,6 +86,7 @@ public class RxBus {
 
     public <T> void registerRxBus(AbsFragment fra, int code, final OnRxBusListener<T> listener){
         RxBus.instance().toFlowable(code)
+                .onBackpressureBuffer()
                .compose(fra.<Message>bindUntilEvent(FragmentEvent.DESTROY))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -101,6 +120,7 @@ public class RxBus {
 
     public <T> Flowable<Message<T>> toFlowable(final int code){
         return  mRxBus.ofType(Message.class)
+                .onBackpressureBuffer()
                 .filter(new io.reactivex.functions.Predicate<Message<T>>(){
 
                     @Override

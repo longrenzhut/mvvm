@@ -2,86 +2,77 @@ package com.zhongcai.base.https
 
 import com.zhongcai.base.Config
 import com.zhongcai.base.rxbus.RxBus
-import com.zhongcai.base.theme.layout.LoadingDialog
-import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
+import io.reactivex.observers.DisposableObserver
 import io.reactivex.schedulers.Schedulers
 import okhttp3.ResponseBody
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.io.InputStream
-import java.lang.ref.WeakReference
 
 /**
- * Created by zc3 on 2018/5/7.
+ * Created by zhutao on 2017/9/28.
+ * 文件下载的回调
  */
-
-abstract class DownFileSubscriber(val destFileDir: String,
-                                  val destFileName: String) : Observer<ResponseBody> {
+abstract class DownFileSubscriber(val fileName: String?,val path: String = Config.path): DisposableObserver<ResponseBody>() {
 
 
-    constructor(destFileName: String):this(Config.DOWN_PATH,destFileName)
+    var disporsable: Disposable? = null
 
-    override fun onComplete() {
-        mLoading?.let{
-            it.dismiss()
-        }
+    init {
+        disporsable = RxBus.instance().toFlowable(FileLoadModel::class.java)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe {
+                progress(it.progress, it.total)
+            }
+
     }
 
-    private var mLoading: LoadingDialog? = null
+    override fun onComplete() {
+        disporsable?.dispose()
+    }
 
-    fun setLoading(mLoading: LoadingDialog?): DownFileSubscriber{
-        if (null != mLoading) {
-            val weak = WeakReference(mLoading)
-            this.mLoading = weak.get()
-        }
-        return this
+    override fun onNext(t: ResponseBody) {
+        saveFile(t)
     }
 
     override fun onError(e: Throwable) {
-        disposable?.dispose()
         OnFailed()
     }
 
-    override fun onNext(response: ResponseBody) {
-        saveFile(response)
+    open fun onSuccess(file: File) {
+        disporsable?.dispose()
+
     }
 
-
-    override fun onSubscribe(d: Disposable) {
+    open fun OnFailed() {
+        disporsable?.dispose()
     }
 
-
-    private var disposable: Disposable? = null
-
-    init {
-        disposable = RxBus.instance().toFlowable(FileLoadModel::class.java)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    progress(it.progress,it.total)
-
-                })
-    }
-
+    abstract fun progress(progress: Long, total: Long)
 
     @Throws(IOException::class)
-    private fun saveFile(response: ResponseBody): File {
+    private fun saveFile(response: ResponseBody?): File? {
+        val tempFile = File(path + "${fileName}.temp")
+        if(tempFile.exists())
+            tempFile.delete()
+
         var inputStream: InputStream? = null
         val buf = ByteArray(2048)
         var len: Int = 0
         var fos: FileOutputStream? = null
         try {
-            inputStream = response.byteStream()
-            val dir = File(destFileDir)
+            inputStream = response?.byteStream()
+            val dir = File(path)
             if (!dir.exists()) {
                 dir.mkdirs()
             }
-            val file = File(dir, destFileName)
+            val file = File(dir, "${fileName}.temp")
             fos = FileOutputStream(file)
-            inputStream?.let{
+            inputStream?.let {
                 len = it.read(buf)
                 while (len != -1) {
                     fos?.write(buf, 0, len)
@@ -89,29 +80,18 @@ abstract class DownFileSubscriber(val destFileDir: String,
                 }
             }
             fos?.flush()
-            disposable?.dispose()
-            onSuccess(file)
-            return file
+            val newFile = File(dir, fileName)
+            file.renameTo(newFile)
+            onSuccess(newFile)
+            return newFile
+        } catch (e: IOException) {
+            OnFailed()
         } finally {
-            try {
-                if (inputStream != null) inputStream.close()
-            } catch (e: IOException) {
-            }
-
-            try {
-                if (fos != null) fos.close()
-            } catch (e: IOException) {
-            }
+            inputStream?.close()
+            fos?.close()
 
         }
-    }
 
-    abstract fun onSuccess(file: File)
-    open fun OnFailed(){
-
-    }
-
-    open fun progress(progress: Long, total: Long){
-
+        return null
     }
 }

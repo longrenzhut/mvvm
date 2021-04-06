@@ -4,107 +4,183 @@
 
     <item
         android:drawable="@drawable/icon_0"
-        android:duration="40" />
+        android:duration="26" />
 
     <item
         android:drawable="@drawable/icon_1"
-        android:duration="40" />
+        android:duration="26" />
 
     <item
         android:drawable="@drawable/icon_2"
-        android:duration="40" />
+        android:duration="26" />
 
     <item
         android:drawable="@drawable/icon_3"
-        android:duration="40" />
+        android:duration="26" />
 
     <item
         android:drawable="@drawable/icon_4"
-        android:duration="40" />
+        android:duration="26" />
 
     <item
         android:drawable="@drawable/icon_5"
-        android:duration="40" />
+        android:duration="26" />
 
     <item
         android:drawable="@drawable/icon_6"
-        android:duration="40" />
+        android:duration="26" />
 
     <item
         android:drawable="@drawable/icon_7"
-        android:duration="40" />
+        android:duration="26" />
 
     <item
         android:drawable="@drawable/icon_8"
-        android:duration="40" />
+        android:duration="26" />
 
     <item
         android:drawable="@drawable/icon_9"
-        android:duration="40" />
+        android:duration="26" />
 
     <item
         android:drawable="@drawable/icon_10"
-        android:duration="40" />
+        android:duration="26" />
 
     <item
         android:drawable="@drawable/icon_11"
-        android:duration="40" />
+        android:duration="26" />
 
     <item
         android:drawable="@drawable/icon_12"
-        android:duration="40" />
+        android:duration="26" />
 
     <item
         android:drawable="@drawable/icon_13"
-        android:duration="40" />
+        android:duration="26" />
 
     <item
         android:drawable="@drawable/icon_14"
-        android:duration="40" />
+        android:duration="26" />
 
     <item
         android:drawable="@drawable/icon_15"
-        android:duration="40" />
+        android:duration="26" />
 
     <item
         android:drawable="@drawable/icon_16"
-        android:duration="40" />
+        android:duration="26" />
 
     <item
         android:drawable="@drawable/icon_17"
-        android:duration="40" />
+        android:duration="26" />
 
     <item
         android:drawable="@drawable/icon_18"
-        android:duration="40" />
+        android:duration="26" />
 
     <item
         android:drawable="@drawable/icon_19"
-        android:duration="40" />
+        android:duration="26" />
 
     <item
         android:drawable="@drawable/icon_20"
-        android:duration="40" />
+        android:duration="26" />
 
     <item
         android:drawable="@drawable/icon_21"
-        android:duration="40" />
+        android:duration="26" />
 
     <item
         android:drawable="@drawable/icon_22"
-        android:duration="40" />
+        android:duration="26" />
 
     <item
         android:drawable="@drawable/icon_23"
-        android:duration="40" />
+        android:duration="26" />
 
     <item
         android:drawable="@drawable/icon_24"
-        android:duration="40" />
+        android:duration="26" />
 
     <item
         android:drawable="@drawable/icon_25"
-        android:duration="40" />
+        android:duration="26" />
+
+    <item
+        android:drawable="@drawable/icon_26"
+        android:duration="26" />
+
+    <item
+        android:drawable="@drawable/icon_27"
+        android:duration="26" />
+
+    <item
+        android:drawable="@drawable/icon_28"
+        android:duration="26" />
+
+    <item
+        android:drawable="@drawable/icon_29"
+        android:duration="26" />
+
+    <item
+        android:drawable="@drawable/icon_30"
+        android:duration="26" />
+
+    <item
+        android:drawable="@drawable/icon_31"
+        android:duration="26" />
+
+    <item
+        android:drawable="@drawable/icon_32"
+        android:duration="26" />
+
+    <item
+        android:drawable="@drawable/icon_33"
+        android:duration="26" />
+
+    <item
+        android:drawable="@drawable/icon_34"
+        android:duration="26" />
+
+    <item
+        android:drawable="@drawable/icon_35"
+        android:duration="26" />
+
+    <item
+        android:drawable="@drawable/icon_36"
+        android:duration="26" />
+
+    <item
+        android:drawable="@drawable/icon_37"
+        android:duration="26" />
+
+    <item
+        android:drawable="@drawable/icon_38"
+        android:duration="26" />
+
+    <item
+        android:drawable="@drawable/icon_39"
+        android:duration="26" />
+
+    <item
+        android:drawable="@drawable/icon_40"
+        android:duration="26" />
+
+    <item
+        android:drawable="@drawable/icon_41"
+        android:duration="26" />
+
+    <item
+        android:drawable="@drawable/icon_42"
+        android:duration="26" />
+
+    <item
+        android:drawable="@drawable/icon_43"
+        android:duration="26" />
+
+    <item
+        android:drawable="@drawable/icon_44"
+        android:duration="26" />
 
 
 </animation-list>

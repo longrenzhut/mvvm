@@ -116,7 +116,7 @@ class ShapeView(ctx: Context,attrs: AttributeSet?): View(ctx,attrs){
             strokeLineRectF?.set(strokeWidth / 2, strokeWidth / 2, width - strokeWidth / 2,
                     height - strokeWidth / 2)
             getRadius(radius)
-            strokeWidthPath.addRoundRect(strokeLineRectF, corners, Path.Direction.CW)
+            strokeWidthPath.addRoundRect(strokeLineRectF!!, corners, Path.Direction.CW)
             initPaint()
             paint?.style = Paint.Style.STROKE
             paint?.color = strokeColor
@@ -137,7 +137,7 @@ class ShapeView(ctx: Context,attrs: AttributeSet?): View(ctx,attrs){
         }
         solidRectF?.set(strokeWidth, strokeWidth, width - strokeWidth, height - strokeWidth)
         getRadius(radius - strokeWidth / 2)
-        solidPath.addRoundRect(solidRectF, corners, Path.Direction.CW)
+        solidPath.addRoundRect(solidRectF!!, corners, Path.Direction.CW)
 
         initPaint()
         paint?.style = Paint.Style.FILL

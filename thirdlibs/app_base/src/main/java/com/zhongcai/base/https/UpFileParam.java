@@ -1,7 +1,13 @@
 package com.zhongcai.base.https;
 
+import android.net.Uri;
+import android.text.TextUtils;
+
 import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import okhttp3.MediaType;
@@ -41,8 +47,16 @@ public class UpFileParam {
      * @return
      */
     public UpFileParam putParam(String key, Object value){
-
+        if(null == value)
+            return this;
         map.put(key,paramtoRequestBody(value));
+        return this;
+    }
+
+    public UpFileParam putParam(String key, byte[] bytes){
+        if(null == bytes)
+            return this;
+        map.put(key,new UploadFileRequestBody(bytes));
         return this;
     }
 
@@ -52,16 +66,39 @@ public class UpFileParam {
      * @param key
      *  1. name 就是 后台接受的name定死了
      * 2， 一种name是随机的
-     * @param file
      *
      * UploadFileRequestBody 监听上传的进度
      */
-    private void fileToRequestBody(String key,File file){
-        if(!file.exists())
-            return;
-        RequestBody requestBody =  new UploadFileRequestBody(file);
-        map.put(key + "\"; filename=\"" + file.getName(), requestBody);
+    private void fileToRequestBody(String key,String path,String fileName){
+        RequestBody requestBody =  new UploadFileRequestBody(new File(path));
+        map.put(key + "\"; filename=\"" +  encode(fileName), requestBody);
     }
+
+    private void fileToRequestBody(String key,File file){
+        RequestBody requestBody =  new UploadFileRequestBody(file);
+        map.put(key + "\"; filename=\"" +  encode(file.getName()), requestBody);
+    }
+
+    private void fileToRequestBody(String key, Uri uri,String fileName){
+        RequestBody requestBody =  new UploadFileRequestBody(uri);
+        map.put(key + "\"; filename=\"" +  encode(fileName), requestBody);
+    }
+
+    private void fileToRequestBody(String key, byte[] bytes,String fileName){
+        RequestBody requestBody =  new UploadFileRequestBody(bytes);
+        map.put(key + "\"; filename=\"" +  encode(fileName), requestBody);
+    }
+
+    public UpFileParam putFile(String key, Uri uri,String fileName){
+        fileToRequestBody(key,uri,fileName);
+        return this;
+    }
+
+    public UpFileParam putFile(String key, byte[] bytes,String fileName){
+        fileToRequestBody(key,bytes,fileName);
+        return this;
+    }
+
 
     //name是随机的
     private void fileToRequestBody(File file){
@@ -69,8 +106,33 @@ public class UpFileParam {
             return;
         len ++;
         RequestBody requestBody =  new UploadFileRequestBody(file);
-        map.put("file" + len  + "\"; filename=\"" + file.getName(), requestBody);
+        map.put("file" + len  + "\"; filename=\"" + encode(file.getName()), requestBody);
 //        map.put(System.currentTimeMillis() + Math.random()*10 + "\"; filename=\"" + file.getName(), requestBody);
+    }
+
+    //name是随机的
+    private void fileToRequestBody(Uri uri,String fileName){
+        if(TextUtils.isEmpty(fileName)) {
+            int index = uri.getPath().lastIndexOf("/");
+            if (index != -1 && index + 1 < uri.getPath().length())
+                fileName = uri.getPath().substring(index + 1);
+            else
+                fileName = uri.getPath();
+        }
+        len ++;
+        RequestBody requestBody =  new UploadFileRequestBody(uri);
+        map.put("file" + len  + "\"; filename=\"" + encode(fileName), requestBody);
+//        map.put(System.currentTimeMillis() + Math.random()*10 + "\"; filename=\"" + file.getName(), requestBody);
+    }
+
+
+    private String encode(String fileName){
+        try {
+            fileName = URLEncoder.encode(fileName, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return fileName;
     }
 
 
@@ -89,6 +151,11 @@ public class UpFileParam {
      * @param key
      * @param path 路径
      */
+    public UpFileParam putFile(String key, String path,String fileName){
+        fileToRequestBody(key,path,fileName);
+        return this;
+    }
+
     public UpFileParam putFile(String key, String path){
         File file = new File(path);
         fileToRequestBody(key,file);
@@ -113,6 +180,10 @@ public class UpFileParam {
      */
     public UpFileParam putFile(File file){
         fileToRequestBody(file);
+        return this;
+    }
+     public UpFileParam putFile(Uri uri,String fileName){
+        fileToRequestBody(uri,fileName);
         return this;
     }
 

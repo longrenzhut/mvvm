@@ -8,6 +8,7 @@ import com.zhongcai.base.utils.ToastUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOError;
 import java.io.IOException;
 
 import okhttp3.ResponseBody;
@@ -42,32 +43,42 @@ public class ValueUtil {
             if(resultData == null){
                 callback.onError(null);
                 if(null != callback)
-                    ToastUtils.showToast("解析错误");
+                    toast("解析错误");
                 return;
             }
 
             JSONObject json = new JSONObject(resultData);
-            int code = json.optInt("code");
+            if(!json.has("meta")){
+                callback.onError(null);
+                return;
+            }
+
+            JSONObject meta = json.optJSONObject("meta");
+            int code = meta.optInt("code");
+
             if (code == 200) {
                 JSONObject data = json.optJSONObject("data");
                 int subCode = data.optInt("subCode");
                 if (subCode == 10000) {
-                    if(null != callback)
+                    if(null != callback){
                         callback.onNext(data.optString("result"));
+                        callback.OnSuccessJson(data);
+                    }
                 }
                 else {
                     //逻辑业务处理提示
                     if(null != callback) {
                         if (callback.isToast())
-                            ToastUtils.showToast(data.optString("subMsg"));
+                            toast(data.optString("subMsg"));
                         callback.OnFailed(subCode);
+                        callback.OnFailed(subCode,data.optString("subMsg"));
                     }
                 }
             } else {
                 //服务器错误提示
                 if(null != callback) {
                     if (callback.isToast())
-                        ToastUtils.showToast(json.optString("msg"));
+                        toast(meta.optString("msg"));
                     callback.onError(null);
                 }
             }
@@ -75,6 +86,15 @@ public class ValueUtil {
         catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    private static void toast(String text){
+        try{
+            ToastUtils.showToast(text);
+        }catch (IOError error){
+            error.printStackTrace();
+        }
+
     }
 
 }

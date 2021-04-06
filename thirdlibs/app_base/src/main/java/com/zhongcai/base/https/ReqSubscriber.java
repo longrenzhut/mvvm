@@ -5,6 +5,7 @@ import com.zhongcai.base.utils.ToastUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOError;
 import java.io.IOException;
 
 import io.reactivex.disposables.CompositeDisposable;
@@ -34,14 +35,21 @@ public class ReqSubscriber<T> extends BaseSubscriber<ResponseBody> {
             if(resultData == null){
                 if(null != callBack)
                     callBack.onError(null);
-                ToastUtils.showToast("解析错误");
+                toast("解析错误");
                 return;
             }
+
 
             JSONObject json = new JSONObject(resultData);
             responseBody.close();
 
-            int code = json.optInt("code");
+            if(!json.has("meta")){
+                callBack.onError(null);
+                return;
+            }
+
+            JSONObject meta = json.optJSONObject("meta");
+            int code = meta.optInt("code");
             if(code == 200){
                 JSONObject data = json.optJSONObject("data");
                 int subCode = data.optInt("subCode");
@@ -55,7 +63,7 @@ public class ReqSubscriber<T> extends BaseSubscriber<ResponseBody> {
                     //逻辑业务处理提示
                     if(null != callBack) {
                         if (callBack.isToast())
-                            ToastUtils.showToast(data.optString("subMsg"));
+                            toast(data.optString("subMsg"));
                         callBack.OnFailed(subCode);
                         callBack.OnFailed(subCode, data.optString("subMsg"));
                     }
@@ -64,7 +72,7 @@ public class ReqSubscriber<T> extends BaseSubscriber<ResponseBody> {
                 //服务器错误提示
                 if(null != callBack) {
                     if (callBack.isToast())
-                        ToastUtils.showToast(json.optString("msg"));
+                        toast(meta.optString("msg"));
                     callBack.onError(null);
                 }
             }
@@ -86,5 +94,19 @@ public class ReqSubscriber<T> extends BaseSubscriber<ResponseBody> {
             callBack.onError(e);
             callBack.onCompleted();
         }
+    }
+    
+    
+    private void toast(String text){
+        try{
+            ToastUtils.showToast(text);
+        }
+        catch (IOError error){
+            error.printStackTrace();
+        }
+        catch (Exception error){
+            error.printStackTrace();
+        }
+
     }
 }

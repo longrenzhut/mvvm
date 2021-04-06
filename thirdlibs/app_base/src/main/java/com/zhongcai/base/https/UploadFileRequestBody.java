@@ -1,8 +1,12 @@
 package com.zhongcai.base.https;
 
+import android.net.Uri;
+import android.text.TextUtils;
 import android.webkit.MimeTypeMap;
 
 import com.zhongcai.base.rxbus.RxBus;
+import com.zhongcai.base.utils.BaseUtils;
+import com.zhongcai.base.utils.ToastUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -32,8 +36,35 @@ public class UploadFileRequestBody extends RequestBody {
 
     public UploadFileRequestBody(File file) {
         String ext = getMimeType(file.getPath());
-//        this.mRequestBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
-        this.mRequestBody = RequestBody.create(MediaType.parse(ext), file);
+        if(!TextUtils.isEmpty(ext))
+            this.mRequestBody = RequestBody.create(MediaType.parse(ext), file);
+        else{
+            try {
+                byte[] bytes = BaseUtils.readStream(file.getPath());
+                this.mRequestBody = RequestBody.create(bytes);
+            } catch (Exception e) {
+                e.printStackTrace();
+                this.mRequestBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+            }
+        }
+    }
+
+
+    public UploadFileRequestBody(Uri fileUri) {
+        byte[]  bytes = BaseUtils.readStream(fileUri);
+        if(null == bytes){
+            ToastUtils.showToast("文件已损坏");
+            return;
+        }
+        this.mRequestBody = RequestBody.create(bytes);
+    }
+
+    public UploadFileRequestBody(byte[] bytes) {
+        if(null == bytes){
+            ToastUtils.showToast("文件已损坏");
+            return;
+        }
+        this.mRequestBody = RequestBody.create(bytes);
     }
 
 

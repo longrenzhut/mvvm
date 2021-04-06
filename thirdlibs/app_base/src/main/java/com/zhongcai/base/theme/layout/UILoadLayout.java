@@ -50,6 +50,8 @@ public class UILoadLayout extends LinearLayout {
     }
 
 
+    boolean isFirst = true;
+
     public void init(Context context) {
 
         LayoutInflater.from(context).inflate(R.layout.layout_ui_load,this,true);
@@ -87,6 +89,10 @@ public class UILoadLayout extends LinearLayout {
      * 请求接口失败展示
      */
     public void loadFailed(){
+        if(!isFirst)
+            return;
+
+        BaseUtils.setVisible(this,1);
         BaseUtils.setVisible(mPbloading,-1);
         BaseUtils.setVisible(mllyFailed,1);
         stopLoadingAnimation();
@@ -139,10 +145,15 @@ public class UILoadLayout extends LinearLayout {
         }
     }
 
+    public boolean isFirst() {
+        return isFirst;
+    }
+
     /**
      * 接口请求成功 隐藏
      */
     public void loadok(){
+        isFirst = false;
         stopLoadingAnimation();
         BaseUtils.setVisible(this,-1);
     }

@@ -10,10 +10,12 @@ import android.widget.RelativeLayout;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.trello.rxlifecycle3.android.FragmentEvent;
 import com.zhongcai.base.R;
 import com.zhongcai.base.base.activity.AbsActivity;
+import com.zhongcai.base.base.viewmodel.BaseViewModel;
 import com.zhongcai.base.theme.layout.HeaderLayout;
 import com.zhongcai.base.theme.layout.StatusbarView;
 import com.zhongcai.base.theme.layout.UILoadLayout;
@@ -111,11 +113,17 @@ abstract public class AbsFragment extends RxFragment{
         mContext.finish();
     }
 
+
+    public void onTvLeftClick(){
+
+    }
+
+
     public void onTvRightClick(){
 
     }
 
-    public void onTvCancelClick(){
+    public void onIvRightClick(){
 
     }
 
@@ -190,7 +198,9 @@ abstract public class AbsFragment extends RxFragment{
         mRootView.addView(view, lp);
     }
 
-
+    public  <T extends BaseViewModel> T LViewModelProviders(Class<T> tClass){
+        return ViewModelProviders.of(this).get(tClass);
+    }
 
     //请求接口时
     public void show(){

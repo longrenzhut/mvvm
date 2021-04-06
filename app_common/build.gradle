@@ -9,8 +9,6 @@ android {
     defaultConfig {
         minSdkVersion rootProject.ext.android.minSdkVersion
         targetSdkVersion rootProject.ext.android.targetSdkVersion
-        versionCode 1
-        versionName "1.0"
 
     }
     buildTypes {
@@ -32,13 +30,14 @@ greendao {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile project(':thirdlibs:wechatsdk')
-    compile project(':thirdlibs:imagepicker')
     compile project(':thirdlibs:app_base')
     compile project(':thirdlibs:vlayout')
     implementation rootProject.ext.dependencies["kotlin-stdlib"]
     implementation rootProject.ext.dependencies["permission"]
     implementation rootProject.ext.dependencies["photoview"]
+    implementation rootProject.ext.dependencies["picture_library"]
     compile rootProject.ext.dependencies["greendao"]
+    compile rootProject.ext.dependencies["picture_library"]
 }
 repositories {
     mavenCentral()

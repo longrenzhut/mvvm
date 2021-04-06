@@ -20,17 +20,17 @@ abstract public class BaseActivity<T extends BaseViewModel> extends AbsActivity 
             public void onChanged(BaseActionEvent baseActionEvent) {
                 switch (baseActionEvent.getAction()){
                     case BaseActionEvent.loading_success:
-                        Logger.debug("loading_success");
+//                        Logger.debug("loading_success");
                         if(null != mUiLayout)
                             mUiLayout.loadok();
                         break;
                     case BaseActionEvent.loading_error:
-                        Logger.debug("loading_error");
+//                        Logger.debug("loading_error");
                         if(null != mUiLayout)
                             mUiLayout.loadFailed();
                         break;
                     case BaseActionEvent.loading_onCompleted:
-                        Logger.debug("loading_onCompleted");
+//                        Logger.debug("loading_onCompleted");
                         dismiss();
                         onCompleted();
                         break;

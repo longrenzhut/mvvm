@@ -18,6 +18,8 @@ import java.lang.reflect.Field;
  */
 public class ToastUtils {
 	public static void showToast(String message) {
+		if(isShowToast())
+			return;
 		if(null == message || "".equals(message) || "null".equals(message) || "非法操作".equals(message))
 			return;
 		View view = null;
@@ -59,5 +61,17 @@ public class ToastUtils {
 		return null;
 	}
 
+
+	private static long lastToastTime;
+	private final static long TIME = 1500;
+
+	public static boolean isShowToast() {
+		long time = System.currentTimeMillis();
+		if (time - lastToastTime < TIME) {
+			return true;
+		}
+		lastToastTime = time;
+		return false;
+	}
 
 }

@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
@@ -14,6 +15,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.zhongcai.base.R;
+import com.zhongcai.base.base.application.BaseApplication;
 import com.zhongcai.base.base.viewmodel.BaseViewModel;
 import com.zhongcai.base.theme.layout.HeaderLayout;
 import com.zhongcai.base.theme.layout.LoadingDialog;
@@ -83,6 +85,10 @@ abstract public class AbsActivity extends RxActivity {
     protected RelativeLayout mRootView;
     private StatusbarView statusbarView;
     protected UILoadLayout mUiLayout;
+
+    public void setBarColor(int color){
+        statusbarView.setBackgroundColor(BaseUtils.getColor(color));
+    }
     /**
      * 设置根容器  里面添加状态栏 头部 以及  进入界面加载动画
      */
@@ -143,17 +149,22 @@ abstract public class AbsActivity extends RxActivity {
     /**
      * 设置一些自定义的空页面
      */
-    protected void setUiLoadSelfLayout(int layoutId){
+    protected void setUiLoadSelfLayout(int layoutId,String text){
 
-        View view = LayoutInflater.from(this).inflate(layoutId,null);
-        view.findViewById(R.id.m_iv_exit).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onIvLeftClick();
-            }
-        });
-        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(-1, -1);
-        mRootView.addView(view, lp);
+        if(null != mUiLayout && mUiLayout.isFirst()) {
+            View view = LayoutInflater.from(this).inflate(layoutId, null);
+            view.findViewById(R.id.m_iv_exit).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onIvLeftClick();
+                }
+            });
+
+            TextView vTvPrompt = findViewId(view, R.id.vTvPrompt);
+            vTvPrompt.setText(text);
+            RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(-1, -1);
+            mRootView.addView(view, lp);
+        }
     }
 
     protected void showNetError(){
@@ -252,7 +263,11 @@ abstract public class AbsActivity extends RxActivity {
 
     }
 
-    public void onTvCancelClick(){
+    public void onTvLeftClick(){
+        finish();
+    }
+
+    public void onIvRightClick(){
 
     }
 
@@ -262,18 +277,47 @@ abstract public class AbsActivity extends RxActivity {
     public void show(){
         if(null == mLoadingDialog)
             mLoadingDialog = new LoadingDialog(this);
-        mLoadingDialog.show();
+        if(!mLoadingDialog.isShowing())
+            mLoadingDialog.show();
+    }
+
+    public void show(String text){
+        if(null == mLoadingDialog)
+            mLoadingDialog = new LoadingDialog(this);
+        if(!mLoadingDialog.isShowing()){
+            mLoadingDialog.setContent(text).setBgColor();
+            mLoadingDialog.show();
+        }
+    }
+
+    public void show(String text,int attr){
+        if(null == mLoadingDialog)
+            mLoadingDialog = new LoadingDialog(this);
+        if(!mLoadingDialog.isShowing()){
+            mLoadingDialog.setContent(text)
+                    .setBgColor()
+                    .show();
+        }
     }
 
 
     public void dismiss(){
-        if(null != mLoadingDialog)
+        if(null != mLoadingDialog && mLoadingDialog.isShowing())
             mLoadingDialog.dismiss();
     }
 
 
+    protected boolean isFont = false;
 
+    @Override
+    protected void onResume() {
+        isFont = true;
+        super.onResume();
+    }
 
-
-
+    @Override
+    protected void onPause() {
+        isFont = false;
+        super.onPause();
+    }
 }
