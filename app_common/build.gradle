@@ -35,9 +35,10 @@ dependencies {
     implementation rootProject.ext.dependencies["kotlin-stdlib"]
     implementation rootProject.ext.dependencies["permission"]
     implementation rootProject.ext.dependencies["photoview"]
-    implementation rootProject.ext.dependencies["picture_library"]
     compile rootProject.ext.dependencies["greendao"]
-    compile rootProject.ext.dependencies["picture_library"]
+    compile(rootProject.ext.dependencies["picture_library"]) {
+        exclude group: 'androidx'//根据包名排除
+    }
 }
 repositories {
     mavenCentral()

@@ -23,6 +23,7 @@ class MainAct : BaseActivity<MainViewModel>() {
                 .show(supportFragmentManager,javaClass.name)
         }
 
+
         mViewModel.getConfig()
     }
 

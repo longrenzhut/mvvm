@@ -12,6 +12,7 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.zhongcai.base.R;
@@ -247,7 +248,7 @@ abstract public class AbsActivity extends RxActivity {
     public void setViewModel(){}
 
     public  <T extends BaseViewModel> T LViewModelProviders(Class<T> tClass){
-        return ViewModelProviders.of(this).get(tClass);
+        return new ViewModelProvider(this).get(tClass);
     }
     protected <V> void observe(LiveData<V> liveData, Observer<V> v){
         liveData.observe(this,v);

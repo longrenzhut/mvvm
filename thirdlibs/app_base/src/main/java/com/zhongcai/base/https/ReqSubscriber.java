@@ -8,8 +8,6 @@ import org.json.JSONObject;
 import java.io.IOError;
 import java.io.IOException;
 
-import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
 import okhttp3.ResponseBody;
 
 /**

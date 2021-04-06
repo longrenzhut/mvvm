@@ -2,17 +2,12 @@ package com.zhongcai.base.https;
 
 
 import android.os.Build;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
 
-import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
-import com.trello.rxlifecycle3.android.ActivityEvent;
-import com.trello.rxlifecycle3.android.FragmentEvent;
+import com.trello.rxlifecycle4.android.ActivityEvent;
+import com.trello.rxlifecycle4.android.FragmentEvent;
 import com.zhongcai.base.Config;
 import com.zhongcai.base.base.activity.AbsActivity;
-import com.zhongcai.base.base.application.BaseApplication;
 import com.zhongcai.base.base.fragment.AbsFragment;
-import com.zhongcai.base.https.jsonfactory.JsonConverterFactory;
 
 import java.io.IOException;
 import java.security.cert.CertificateException;
@@ -22,18 +17,17 @@ import java.util.concurrent.TimeUnit;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.X509TrustManager;
 
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.observers.DisposableObserver;
-import io.reactivex.schedulers.Schedulers;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.observers.DisposableObserver;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
-import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
@@ -178,7 +172,7 @@ public class HttpProvider {
         builder = new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())
 //                .addConverterFactory(JsonConverterFactory.create())
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create());// 添加 RxJava 适配器
+                .addCallAdapterFactory(RxJava3CallAdapterFactory.createSynchronous());// 添加 RxJava 适配器
 
     }
 

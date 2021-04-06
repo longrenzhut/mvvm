@@ -7,8 +7,8 @@ import com.zhongcai.base.https.UpFileParam
 import com.zhongcai.base.rxbus.RxBus
 import com.zhongcai.base.utils.CompUtils
 import com.zhongcai.common.ui.model.FileModel
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
+import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.rxjava3.disposables.Disposable
 
 
 class UploadHelper{

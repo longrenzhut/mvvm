@@ -5,14 +5,14 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.trello.rxlifecycle3.LifecycleProvider;
-import com.trello.rxlifecycle3.LifecycleTransformer;
-import com.trello.rxlifecycle3.RxLifecycle;
-import com.trello.rxlifecycle3.android.ActivityEvent;
-import com.trello.rxlifecycle3.android.RxLifecycleAndroid;
+import com.trello.rxlifecycle4.LifecycleProvider;
+import com.trello.rxlifecycle4.LifecycleTransformer;
+import com.trello.rxlifecycle4.RxLifecycle;
+import com.trello.rxlifecycle4.android.ActivityEvent;
+import com.trello.rxlifecycle4.android.RxLifecycleAndroid;
 
-import io.reactivex.Observable;
-import io.reactivex.subjects.BehaviorSubject;
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.subjects.BehaviorSubject;
 
 /**
  * rxLife activity
@@ -31,6 +31,7 @@ public class RxActivity extends AppCompatActivity implements
         lifecycleSubject = BehaviorSubject.create();
         lifecycleSubject.onNext(ActivityEvent.CREATE);
     }
+
 
     @Override
     public Observable<ActivityEvent> lifecycle() {

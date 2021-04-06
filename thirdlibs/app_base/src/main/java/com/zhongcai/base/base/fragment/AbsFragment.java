@@ -10,9 +10,8 @@ import android.widget.RelativeLayout;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 
-import com.trello.rxlifecycle3.android.FragmentEvent;
 import com.zhongcai.base.R;
 import com.zhongcai.base.base.activity.AbsActivity;
 import com.zhongcai.base.base.viewmodel.BaseViewModel;
@@ -21,10 +20,6 @@ import com.zhongcai.base.theme.layout.StatusbarView;
 import com.zhongcai.base.theme.layout.UILoadLayout;
 import com.zhongcai.base.utils.BaseUtils;
 
-import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
-import okhttp3.ResponseBody;
 
 /**
  * Created by Administrator on 2018/3/7.
@@ -199,7 +194,7 @@ abstract public class AbsFragment extends RxFragment{
     }
 
     public  <T extends BaseViewModel> T LViewModelProviders(Class<T> tClass){
-        return ViewModelProviders.of(this).get(tClass);
+        return new ViewModelProvider(this).get(tClass);
     }
 
     //请求接口时

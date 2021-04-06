@@ -17,9 +17,8 @@ import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 import java.util.concurrent.TimeoutException;
 
-import io.reactivex.Observer;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.observers.DisposableObserver;
+import io.reactivex.rxjava3.observers.DisposableObserver;
+
 
 /**
  * Created by zhutao on 2018/3/7.

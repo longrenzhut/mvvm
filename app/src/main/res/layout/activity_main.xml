@@ -14,4 +14,8 @@
         android:text="Hello World!"
         />
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width=""
+        android:layout_height=""
+
 </RelativeLayout>

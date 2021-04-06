@@ -3,9 +3,9 @@ package com.zhongcai.base.rxbinding
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.TextView
-import io.reactivex.ObservableEmitter
-import io.reactivex.ObservableOnSubscribe
-import io.reactivex.disposables.Disposable
+import io.reactivex.rxjava3.core.ObservableEmitter
+import io.reactivex.rxjava3.core.ObservableOnSubscribe
+import io.reactivex.rxjava3.disposables.Disposable
 
 /**
  * Created by zhutao on 2017/9/19.

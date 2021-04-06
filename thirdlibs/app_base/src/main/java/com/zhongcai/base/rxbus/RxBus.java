@@ -1,17 +1,19 @@
 package com.zhongcai.base.rxbus;
 
-import com.trello.rxlifecycle3.android.ActivityEvent;
-import com.trello.rxlifecycle3.android.FragmentEvent;
+import com.trello.rxlifecycle4.android.ActivityEvent;
+import com.trello.rxlifecycle4.android.FragmentEvent;
 import com.zhongcai.base.base.activity.AbsActivity;
 import com.zhongcai.base.base.fragment.AbsFragment;
 
-import io.reactivex.Flowable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
-import io.reactivex.processors.FlowableProcessor;
-import io.reactivex.processors.PublishProcessor;
-import io.reactivex.schedulers.Schedulers;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Flowable;
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.functions.Consumer;
+import io.reactivex.rxjava3.functions.Predicate;
+import io.reactivex.rxjava3.processors.FlowableProcessor;
+import io.reactivex.rxjava3.processors.PublishProcessor;
+import io.reactivex.rxjava3.schedulers.Schedulers;
+
 
 /**
  *
@@ -121,10 +123,9 @@ public class RxBus {
     public <T> Flowable<Message<T>> toFlowable(final int code){
         return  mRxBus.ofType(Message.class)
                 .onBackpressureBuffer()
-                .filter(new io.reactivex.functions.Predicate<Message<T>>(){
-
+                .filter(new Predicate<Message<T>>(){
                     @Override
-                    public boolean test(Message<T> message) throws Exception {
+                    public boolean test(Message<T> message) {
                         return message.getCode() == code;
                     }
                 });

@@ -10,8 +10,8 @@ import com.tencent.mm.opensdk.openapi.WXAPIFactory
 import com.zhongcai.base.https.BaseSubscriber
 import com.zhongcai.base.https.HttpProvider
 import com.zhongcai.base.utils.ToastUtils
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.schedulers.Schedulers
 import okhttp3.ResponseBody
 import org.json.JSONObject
 

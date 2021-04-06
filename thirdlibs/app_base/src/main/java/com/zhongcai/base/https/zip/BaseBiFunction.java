@@ -1,6 +1,6 @@
 package com.zhongcai.base.https.zip;
 
-import io.reactivex.functions.BiFunction;
+import io.reactivex.rxjava3.functions.BiFunction;
 import okhttp3.ResponseBody;
 
 /**

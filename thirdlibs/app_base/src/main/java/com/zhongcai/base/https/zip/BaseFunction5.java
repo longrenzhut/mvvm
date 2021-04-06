@@ -1,7 +1,6 @@
 package com.zhongcai.base.https.zip;
 
-import io.reactivex.functions.Function4;
-import io.reactivex.functions.Function5;
+import io.reactivex.rxjava3.functions.Function5;
 import okhttp3.ResponseBody;
 
 /**

@@ -5,14 +5,14 @@ import android.text.Editable
 import android.view.View
 import android.widget.TextView
 import androidx.viewpager.widget.ViewPager
-import com.trello.rxlifecycle3.android.ActivityEvent
-import com.trello.rxlifecycle3.android.FragmentEvent
+import com.trello.rxlifecycle4.android.ActivityEvent
+import com.trello.rxlifecycle4.android.FragmentEvent
 import com.zhongcai.base.base.activity.AbsActivity
 import com.zhongcai.base.base.fragment.AbsFragment
 import com.zhongcai.base.utils.Logger
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 
 
@@ -67,17 +67,17 @@ object RxClick {
 
     }
 
-    @SuppressLint("CheckResult")
-    fun searchEdit(activity: AbsActivity,view: TextView?,afterTextChanged: (s: Editable)-> Unit){
-        Observable.create(TextChangeOnSubscribe(view))
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .compose(activity.bindUntilEvent(ActivityEvent.DESTROY))
-            .throttleFirst(1, TimeUnit.SECONDS)
-            .subscribe {
-                afterTextChanged(it)
-            }
-    }
+//    @SuppressLint("CheckResult")
+//    fun searchEdit(activity: AbsActivity,view: TextView?,afterTextChanged: (s: Editable)-> Unit){
+//    Observable.create(TextChangeOnSubscribe(view))
+//    .subscribeOn(Schedulers.io())
+//    .observeOn(AndroidSchedulers.mainThread())
+//    .compose(activity.bindUntilEvent<Editable>(ActivityEvent.DESTROY))
+//    .throttleFirst(1, TimeUnit.SECONDS)
+//    .subscribe {
+//        afterTextChanged(it)
+//    }
+//    }
 
     @SuppressLint("CheckResult")
     fun searchEdit(fragment: AbsFragment,view: TextView?,afterTextChanged: (s: Editable)-> Unit){
