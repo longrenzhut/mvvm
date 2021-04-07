@@ -9,8 +9,8 @@
 
         <ImageView
             android:id="@+id/iv_icon"
-            android:layout_width="@dimen/x120"
-            android:layout_height="@dimen/x90"
+            android:layout_width="@dimen/dp_120"
+            android:layout_height="@dimen/dp_90"
             android:src="@drawable/nodata"
             />
 
@@ -22,14 +22,14 @@
             android:text="暂无数据"
             android:textSize="@dimen/sp_14"
             android:textColor="#B9BEC3"
-            android:layout_marginTop="@dimen/y10"/>
+            android:layout_marginTop="@dimen/dp_10"/>
 
 
      <!--   <zcfinance.base.ui.widget.textview.XTextView
             android:id="@+id/tv_load_again"
-            android:layout_width="@dimen/x110"
-            android:layout_height="@dimen/y36"
-            android:layout_marginTop="@dimen/y64"
+            android:layout_width="@dimen/dp_110"
+            android:layout_height="@dimen/dp_36"
+            android:layout_marginTop="@dimen/dp_64"
             android:textSize="@dimen/sp_15"
             android:text="刷新试试"/>-->
 

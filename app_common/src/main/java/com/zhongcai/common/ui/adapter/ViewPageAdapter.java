@@ -35,7 +35,7 @@ public class ViewPageAdapter<T extends View> extends PagerAdapter {
 		this.mArrays = arrays;
 		this.vViewGroup = viewGroup;
 
-		mNavigationWidth = mContext.getResources().getDimensionPixelOffset(com.zhongcai.base.R.dimen.x8);
+		mNavigationWidth = mContext.getResources().getDimensionPixelOffset(R.dimen.dp_8);
 
 		initTips();
 	}

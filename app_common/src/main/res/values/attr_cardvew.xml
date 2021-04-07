@@ -23,14 +23,14 @@
         <attr name="ycStartShadowColor" format="color"/>
         <attr name="ycEndShadowColor" format="color"/>
     </declare-styleable>
-    <dimen name="yc_cardview_compat_inset_shadow">1dp</dimen>
+<!--    <dimen name="yc_cardview_compat_inset_shadow">1dp</dimen>
     <dimen name="yc_cardview_default_elevation">2dp</dimen>
-    <dimen name="yc_cardview_default_radius">2dp</dimen>
+    <dimen name="yc_cardview_default_radius">2dp</dimen>-->
 
     <style name="Base.YcCardView" parent="android:Widget">
-        <item name="ycCardCornerRadius">@dimen/yc_cardview_default_radius</item>
-        <item name="ycCardElevation">@dimen/yc_cardview_default_elevation</item>
-        <item name="ycCardMaxElevation">@dimen/yc_cardview_default_elevation</item>
+        <item name="ycCardCornerRadius">@dimen/dp_1</item>
+        <item name="ycCardElevation">@dimen/dp_2</item>
+        <item name="ycCardMaxElevation">@dimen/dp_2</item>
         <item name="ycCardUseCompatPadding">false</item>
         <item name="ycCardPreventCornerOverlap">true</item>
     </style>

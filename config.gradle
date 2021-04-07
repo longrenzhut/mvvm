@@ -2,7 +2,7 @@ ext{
     android = [
             compileSdkVersion: 30,
             buildToolsVersion: "30.0.3",
-            applicationId    : "com.zhongcai.hydhome",
+            applicationId    : "com.aiwo.service",
             minSdkVersion    : 19,
             targetSdkVersion : 30,
             versionCode      : 20191128,
@@ -12,6 +12,9 @@ ext{
     dependencies = [
             "androidx-appcompat"       : "androidx.appcompat:appcompat:1.3.0-rc01",
             "androidx-recyclerview"       : "androidx.recyclerview:recyclerview:1.2.0-rc01",
+            "androidx-support-v4"       : "androidx.legacy:legacy-support-v4:1.0.0",
+            "androidx-localbroadcastmanager"       : "androidx.localbroadcastmanager:localbroadcastmanager:1.0.0",
+
             "androidx-lifecycle-extensions"       : "androidx.lifecycle:lifecycle-extensions:2.2.0",
 //            "androidx-core"            : "androidx.core:core-ktx:1.0.2",
 
@@ -51,6 +54,7 @@ ext{
             "calendarview"                : "com.haibin:calendarview:3.6.7",
             "picture_library"                : "com.github.LuckSiege.PictureSelector:picture_library:v2.6.0",
 //            "smartTable"                : "com.github.huangyanbin:SmartTable:2.2.0",
+            "autosize"                : "me.jessyan:autosize:1.2.1",
     ]
 }
 

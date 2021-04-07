@@ -13,21 +13,21 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/y60">
+            android:layout_height="@dimen/dp_60">
 
 
             <TextView
                 android:id="@+id/mTvCancel"
                 android:layout_width="wrap_content"
-                android:layout_height="@dimen/y28"
+                android:layout_height="@dimen/dp_28"
                 android:textSize="@dimen/sp_14"
-                android:paddingLeft="@dimen/x14"
-                android:paddingRight="@dimen/x14"
+                android:paddingLeft="@dimen/dp_14"
+                android:paddingRight="@dimen/dp_14"
                 android:gravity="center"
-                android:layout_marginRight="@dimen/x12"
+                android:layout_marginRight="@dimen/dp_12"
                 android:layout_centerVertical="true"
                 android:textColor="#1F2736"
-                android:layout_marginLeft="@dimen/x12"
+                android:layout_marginLeft="@dimen/dp_12"
                 android:text="取消"
                 android:background="@drawable/selector_prompt_left"/>
 
@@ -46,14 +46,14 @@
             <TextView
                 android:id="@+id/mTvSelector"
                 android:layout_width="wrap_content"
-                android:layout_height="@dimen/y28"
+                android:layout_height="@dimen/dp_28"
                 android:textSize="@dimen/sp_14"
-                android:paddingLeft="@dimen/x14"
+                android:paddingLeft="@dimen/dp_14"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:paddingRight="@dimen/x14"
+                android:paddingRight="@dimen/dp_14"
                 android:gravity="center"
-                android:layout_marginRight="@dimen/x12"
+                android:layout_marginRight="@dimen/dp_12"
                 android:textColor="@color/white"
                 android:text="确定"
                 android:background="@drawable/selector_prompt_right"/>
@@ -65,17 +65,17 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/mRvTab"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/y36"
-            android:layout_marginLeft="@dimen/x24"
+            android:layout_height="@dimen/dp_36"
+            android:layout_marginLeft="@dimen/dp_24"
             />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:layout_marginTop="@dimen/y10"
-            android:paddingBottom="@dimen/y10"
+            android:layout_marginTop="@dimen/dp_10"
+            android:paddingBottom="@dimen/dp_10"
             android:clipChildren="true"
             android:id="@+id/mRvAddress"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/y360"/>
+            android:layout_height="@dimen/dp_360"/>
 
     </LinearLayout>
 </LinearLayout>

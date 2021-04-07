@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:textSize="@dimen/sp_14"
         android:textColor="#111928"
-        android:layout_marginRight="@dimen/x30"/>
+        android:layout_marginRight="@dimen/dp_30"/>
 
 
     <RelativeLayout
@@ -20,7 +20,7 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:visibility="gone"
-        android:layout_marginRight="@dimen/x30"
+        android:layout_marginRight="@dimen/dp_30"
         >
 
     <TextView
@@ -30,11 +30,11 @@
         android:text="请选择"
         android:layout_centerVertical="true"
         android:textColor="#067C5F"
-        android:layout_marginRight="@dimen/x30"/>
+        android:layout_marginRight="@dimen/dp_30"/>
 
         <View
-            android:layout_width="@dimen/y42"
-            android:layout_height="@dimen/y2"
+            android:layout_width="@dimen/dp_42"
+            android:layout_height="@dimen/dp_2"
             android:layout_alignParentBottom="true"
             android:background="#067C5F"/>
 

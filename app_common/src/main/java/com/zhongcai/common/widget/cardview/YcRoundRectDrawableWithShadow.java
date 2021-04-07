@@ -101,7 +101,7 @@ class YcRoundRectDrawableWithShadow extends Drawable {
         }else {
             mShadowEndColor = resources.getColor(R.color.yc_cardview_shadow_end_color);
         }
-        mInsetShadow = resources.getDimensionPixelSize(R.dimen.yc_cardview_compat_inset_shadow);
+        mInsetShadow = resources.getDimensionPixelSize(R.dimen.dp_2);
         mPaint = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.DITHER_FLAG);
         mPaint.setColor(backgroundColor);
         mCornerShadowPaint = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.DITHER_FLAG);

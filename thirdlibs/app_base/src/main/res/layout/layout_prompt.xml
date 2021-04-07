@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:visibility="gone"
         android:background="#E77EA0"
-        android:layout_height="@dimen/y30">
+        android:layout_height="@dimen/dp_30">
 
         <TextView
             android:id="@+id/tv_count_failed"
@@ -22,11 +22,11 @@
 
         <ImageView
             android:id="@+id/iv_failed"
-            android:layout_width="@dimen/x16"
+            android:layout_width="@dimen/dp_16"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="@dimen/x12"
+            android:layout_marginRight="@dimen/dp_12"
             android:layout_centerVertical="true"
-            android:layout_height="@dimen/x16"
+            android:layout_height="@dimen/dp_16"
             android:src="@drawable/cancel_up"
             android:visibility="gone"
             />

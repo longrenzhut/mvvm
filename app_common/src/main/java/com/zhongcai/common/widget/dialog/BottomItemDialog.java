@@ -53,7 +53,7 @@ public class BottomItemDialog<T extends BottomModel> extends BaseDialogFra {
         this.datas = list;
         if(null != mAdapter) {
             if(null != list &&list.size() > 7){
-                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(-1, BaseUtils.getDimen(R.dimen.y60) * 7);
+                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(-1, BaseUtils.getDimen(R.dimen.dp_60) * 7);
                 mRvContent.setLayoutParams(lp);
             }
             else{

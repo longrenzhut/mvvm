@@ -15,7 +15,7 @@
 
                     <solid  android:color="@color/cl_f9f9f9"/>
 
-                    <corners android:radius="@dimen/x50"/>
+                    <corners android:radius="@dimen/dp_50"/>
 
                 </shape>
 
@@ -27,7 +27,7 @@
 
                     <solid  android:color="@color/white"/>
 
-                    <corners android:radius="@dimen/x50"/>
+                    <corners android:radius="@dimen/dp_50"/>
 
                 </shape>
             </item>

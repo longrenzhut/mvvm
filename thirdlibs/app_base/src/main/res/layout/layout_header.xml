@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/y40">
+    android:layout_height="@dimen/dp_40">
 
     <ImageView
         android:id="@+id/vIvLeft"
-        android:layout_marginLeft="@dimen/x6"
-        android:layout_width="@dimen/x40"
-        android:layout_height="@dimen/x40"
-        android:padding="@dimen/x6"
+        android:layout_marginLeft="@dimen/dp_6"
+        android:layout_width="@dimen/dp_40"
+        android:layout_height="@dimen/dp_40"
+        android:padding="@dimen/dp_6"
         android:layout_centerVertical="true"
         android:visibility="gone"
         android:src="@drawable/back"
@@ -19,11 +19,11 @@
         android:id="@+id/vTvLeft"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:textSize="@dimen/x16"
+        android:textSize="@dimen/dp_16"
         android:layout_centerVertical="true"
         android:gravity="center"
-        android:paddingLeft="@dimen/x12"
-        android:paddingRight="@dimen/x12"
+        android:paddingLeft="@dimen/dp_12"
+        android:paddingRight="@dimen/dp_12"
         android:textColor="@color/cl_161722"/>
 
 
@@ -35,7 +35,7 @@
         android:textSize="@dimen/sp_18"
         android:lines="1"
         android:ellipsize="end"
-        android:maxWidth="@dimen/x250"
+        android:maxWidth="@dimen/dp_250"
         android:textStyle="bold"
         android:textColor="#1F2736"/>
 
@@ -44,19 +44,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="@dimen/sp_16"
-        android:padding="@dimen/x6"
+        android:padding="@dimen/dp_6"
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
-        android:layout_marginRight="@dimen/x18"
+        android:layout_marginRight="@dimen/dp_18"
         android:visibility="gone"
         android:background="@drawable/common_click_circle"
         android:textColor="#161722"/>
 
     <ImageView
         android:id="@+id/vIvRight"
-        android:layout_width="@dimen/x28"
-        android:layout_height="@dimen/x28"
-        android:layout_marginRight="@dimen/x12"
+        android:layout_width="@dimen/dp_28"
+        android:layout_height="@dimen/dp_28"
+        android:layout_marginRight="@dimen/dp_12"
         android:visibility="gone"
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"

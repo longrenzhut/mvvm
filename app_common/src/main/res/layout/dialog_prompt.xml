@@ -7,7 +7,7 @@
     android:layout_height="match_parent">
 
     <LinearLayout
-        android:layout_width="@dimen/x296"
+        android:layout_width="@dimen/dp_296"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:background="@drawable/shape_circle_8"
@@ -15,7 +15,7 @@
 
         <View
             android:layout_width="1dp"
-            android:layout_height="@dimen/y10"/>
+            android:layout_height="@dimen/dp_10"/>
 
         <TextView
             android:id="@+id/mTvTitle"
@@ -26,21 +26,21 @@
             android:textColor="@color/cl_1F2736"
             android:visibility="gone"
             android:textStyle="bold"
-            android:layout_marginTop="@dimen/y20"/>
+            android:layout_marginTop="@dimen/dp_20"/>
 
 
         <TextView
             android:id="@+id/mTvPrompt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/x20"
-            android:layout_marginRight="@dimen/x20"
+            android:layout_marginLeft="@dimen/dp_20"
+            android:layout_marginRight="@dimen/dp_20"
             android:textSize="@dimen/sp_16"
             android:textColor="@color/cl_1F2736"
-            android:minHeight="@dimen/y32"
+            android:minHeight="@dimen/dp_32"
             android:textStyle="bold"
-            android:layout_marginTop="@dimen/y25"
-            android:layout_marginBottom="@dimen/y35"
+            android:layout_marginTop="@dimen/dp_25"
+            android:layout_marginBottom="@dimen/dp_35"
             android:gravity="center"/>
 
 
@@ -49,21 +49,21 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:background="@color/transparent"
-            android:layout_marginBottom="@dimen/y24"
+            android:layout_marginBottom="@dimen/dp_24"
             android:orientation="horizontal">
 
 
 
             <View
-                android:layout_width="@dimen/x8"
+                android:layout_width="@dimen/dp_8"
                 android:layout_height="1dp"/>
 
 
             <TextView
                 android:id="@+id/mTvCancel"
                 android:layout_width="0dp"
-                android:layout_height="@dimen/y42"
-                android:layout_marginLeft="@dimen/x12"
+                android:layout_height="@dimen/dp_42"
+                android:layout_marginLeft="@dimen/dp_12"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:background="@drawable/selector_prompt_left"
@@ -75,9 +75,9 @@
                 android:id="@+id/mTvOk"
                 android:layout_width="0dp"
                 android:layout_weight="1"
-                android:layout_height="@dimen/y42"
-                android:layout_marginLeft="@dimen/x12"
-                android:layout_marginRight="@dimen/x20"
+                android:layout_height="@dimen/dp_42"
+                android:layout_marginLeft="@dimen/dp_12"
+                android:layout_marginRight="@dimen/dp_20"
                 android:background="@drawable/selector_ui_load"
                 android:textSize="@dimen/sp_18"
                 android:gravity="center"

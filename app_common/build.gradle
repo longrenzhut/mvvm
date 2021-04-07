@@ -39,6 +39,10 @@ dependencies {
     compile(rootProject.ext.dependencies["picture_library"]) {
         exclude group: 'androidx'//根据包名排除
     }
+
+    compile project(':thirdlibs:androidMqtt')
+//    implementation 'org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.5'
+//    implementation 'org.eclipse.paho:org.eclipse.paho.android.service:1.1.1'
 }
 repositories {
     mavenCentral()

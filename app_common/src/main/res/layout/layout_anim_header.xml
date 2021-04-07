@@ -3,11 +3,11 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:gravity="center"
-    android:layout_height="@dimen/y48">
+    android:layout_height="@dimen/dp_48">
     
     <ImageView
         android:id="@+id/mIvAnim"
-        android:layout_width="@dimen/x30"
-        android:layout_height="@dimen/x30" />
+        android:layout_width="@dimen/dp_30"
+        android:layout_height="@dimen/dp_30" />
 
 </LinearLayout>
